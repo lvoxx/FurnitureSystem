@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -113,6 +115,49 @@ public class TextFieldAnimation extends JTextField {
                         }
                     }
                 }
+            }
+        });
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    if (!animator.isRunning()) {
+                            if (show) {
+                                setEditable(true);
+                                show = false;
+                                location = 0;
+                                animator.start();
+                                if (thread != null) {
+                                    thread.interrupt();
+                                }
+                                if (event != null) {
+                                    event.onCancel();
+                                }
+                            } else {
+                                setEditable(false);
+                                show = true;
+                                location = getWidth();
+                                animator.start();
+                                if (event != null) {
+                                    thread = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            event.onKeyEnterPressed(callBack);
+                                        }
+                                    });
+                                    thread.start();
+                                }
+                            }
+                        }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
             }
         });
         callBack = new EventCallBack() {

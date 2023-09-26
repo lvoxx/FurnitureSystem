@@ -5,6 +5,7 @@
 package dashboard.components.tabledrawer;
 
 import dashboard.components.table.controllers.IData;
+import dashboard.components.table.frame_edit.CustomerEditFrame;
 import dashboard.components.table.frame_view.CustomerViewFrame;
 import dashboard.components.table.swing.TableActionCellEditor;
 import dashboard.components.table.swing.TableActionCellRender;
@@ -44,7 +45,11 @@ public class TableCustomer extends javax.swing.JPanel {
         TableActionEvent event = new TableActionEvent() {
             @Override
             public void onEdit(int row) {
-                System.out.println("Edit row : " + row);
+                 //Get CustomerID by row index
+                String rowData = table.getModel().getValueAt(row, 0).toString();
+                
+                //Init new JFrame to fill data
+                new CustomerEditFrame(Integer.valueOf(rowData)).show();
             }
 
             @Override
@@ -66,7 +71,6 @@ public class TableCustomer extends javax.swing.JPanel {
                 
                 //Init new JFrame to fill data
                 new CustomerViewFrame(Integer.valueOf(rowData)).show();
-                //System.out.println("View row : " + row);
             }
         };
         table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());

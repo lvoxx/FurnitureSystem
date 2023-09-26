@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package dashboard.components.table.frame_view;
+package dashboard.components.table.frame_edit;
 
 import java.awt.Color;
 import query.tool.model.Customer;
@@ -19,7 +19,7 @@ import query.tool.query.DiscountQuery;
  *
  * @author Admin
  */
-public class CustomerViewFrame extends javax.swing.JFrame {
+public class CustomerEditFrame extends javax.swing.JFrame {
 
     private Connection conn;
     private JFrame frame;
@@ -30,7 +30,7 @@ public class CustomerViewFrame extends javax.swing.JFrame {
     private Customer cus;
     private Discount dis;
 
-    public CustomerViewFrame(int customerID) {
+    public CustomerEditFrame(int customerID) {
         this.setUndecorated(true);
         this.getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         initComponents();
@@ -89,7 +89,6 @@ public class CustomerViewFrame extends javax.swing.JFrame {
             }
         });
 
-        cusType.setEditable(false);
         cusType.setText("Customer Type");
         cusType.setLabelText("Customer Type");
         cusType.addActionListener(new java.awt.event.ActionListener() {
@@ -101,7 +100,6 @@ public class CustomerViewFrame extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 32)); // NOI18N
         jLabel1.setText("Customer Info");
 
-        cusName.setEditable(false);
         cusName.setText("Name");
         cusName.setLabelText("Customer Name");
         cusName.addActionListener(new java.awt.event.ActionListener() {
@@ -110,7 +108,6 @@ public class CustomerViewFrame extends javax.swing.JFrame {
             }
         });
 
-        contactNo.setEditable(false);
         contactNo.setText("Contact");
         contactNo.setLabelText("Contact No");
         contactNo.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +116,6 @@ public class CustomerViewFrame extends javax.swing.JFrame {
             }
         });
 
-        address.setEditable(false);
         address.setText("Address");
         address.setLabelText("Address");
         address.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +133,6 @@ public class CustomerViewFrame extends javax.swing.JFrame {
             }
         });
 
-        discount.setEditable(false);
         discount.setText("Discount");
         discount.setLabelText("Discount");
         discount.addActionListener(new java.awt.event.ActionListener() {

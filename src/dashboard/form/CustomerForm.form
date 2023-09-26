@@ -24,7 +24,7 @@
           <Component id="table" alignment="0" pref="1018" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
-              <Component id="textFieldAnimation1" min="-2" pref="445" max="-2" attributes="0"/>
+              <Component id="searchField" min="-2" pref="445" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Group type="102" attributes="0">
@@ -40,7 +40,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="textFieldAnimation1" min="-2" max="-2" attributes="0"/>
+              <Component id="searchField" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="39" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="addCustomerBtn" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -53,10 +53,10 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="dashboard.components.textfield.TextFieldAnimation" name="textFieldAnimation1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Search"/>
-      </Properties>
+    <Component class="dashboard.components.textfield.TextFieldAnimation" name="searchField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchFieldActionPerformed"/>
+      </Events>
     </Component>
     <Component class="dashboard.components.table.swing.ClearButton" name="clearButton1">
       <Properties>

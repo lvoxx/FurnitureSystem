@@ -73,7 +73,6 @@
   <SubComponents>
     <Component class="textfield.swing.TextField" name="cusType">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="Customer Type"/>
         <Property name="labelText" type="java.lang.String" value="Customer Type"/>
       </Properties>
@@ -91,7 +90,6 @@
     </Component>
     <Component class="textfield.swing.TextField" name="cusName">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="Name"/>
         <Property name="labelText" type="java.lang.String" value="Customer Name"/>
       </Properties>
@@ -101,7 +99,6 @@
     </Component>
     <Component class="textfield.swing.TextField" name="contactNo">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="Contact"/>
         <Property name="labelText" type="java.lang.String" value="Contact No"/>
       </Properties>
@@ -111,7 +108,6 @@
     </Component>
     <Component class="textfield.swing.TextField" name="address">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="Address"/>
         <Property name="labelText" type="java.lang.String" value="Address"/>
       </Properties>
@@ -131,7 +127,6 @@
     </Component>
     <Component class="textfield.swing.TextField" name="discount">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="Discount"/>
         <Property name="labelText" type="java.lang.String" value="Discount"/>
       </Properties>

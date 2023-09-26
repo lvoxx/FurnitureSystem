@@ -7,6 +7,9 @@ package dashboard.form;
 
 import dashboard.components.model.MCustomer;
 import dashboard.components.table.controllers.IData;
+import dashboard.components.textfield.EventCallBack;
+import dashboard.components.textfield.EventTextField;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import java.sql.*;
 import java.util.List;
@@ -41,7 +44,51 @@ public class CustomerForm extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null, ex);
         }
+        searchField.addEvent(new EventTextField() {
+            @Override
+            public void onPressed(EventCallBack call) {
+                try {
+                    //  Test
+                    try {
+                        for (int i = 1; i <= 70; i++) {
+                            Thread.sleep(10);
+                        }
+                        call.done();
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
+                    
+                    //Do search
+                    reloadDataFromSearch();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null,ex);
+                }
+            }
+            @Override
+            public void onKeyEnterPressed(EventCallBack call) {
+                try {
+                    //  Test
+                    try {
+                        for (int i = 1; i <= 70; i++) {
+                            Thread.sleep(10);
+                        }
+                        call.done();
+                    } catch (Exception e) {
+                        System.err.println(e);
+                    }
+                    
+                    //Do search
+                    reloadDataFromSearch();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CustomerForm.class.getName()).log(Level.SEVERE, null,ex);
+                }
+            }
 
+            @Override
+            public void onCancel() {
+
+            }
+        });
         tableManipulation();
 
     }
@@ -83,10 +130,11 @@ public class CustomerForm extends javax.swing.JPanel {
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
-
+        searchField.setText(null);
         //model.fireTableDataChanged();
         getCustomerDateFromDB();
         loadData();
+        
     }
 
     private void getCustomerDateFromDB() throws SQLException {
@@ -105,6 +153,35 @@ public class CustomerForm extends javax.swing.JPanel {
         this.customers = queryC.selectMCustomer();
         this.discounts = queryD.selectDiscountList();
     }
+    
+    private void reloadDataFromSearch() throws SQLException {
+        //Remove All
+        DefaultTableModel model = (DefaultTableModel) table.getTable().getModel();
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+
+        //model.fireTableDataChanged();
+        getCustomerDateBySearching(searchField.getText());
+        loadData();
+    }
+    
+    private void getCustomerDateBySearching(String searchName) throws SQLException {
+        //Load All Data from server
+        try {
+            this.conn = Settings.BuildConnect();
+            if (this.conn == null) {
+                Settings.TryGetConnection(frame, conn);
+            } else {
+                this.queryC = new CustomerQuery(conn);
+                this.queryD = new DiscountQuery(conn);
+            }
+        } catch (SQLException ex) {
+            //toLoginForm();
+        }
+        this.customers = queryC.selectMCustomerSearch(searchName);
+        this.discounts = queryD.selectDiscountList();
+    }
 
     private void toLoginForm() {
         //System.out.print(1);
@@ -121,14 +198,18 @@ public class CustomerForm extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        textFieldAnimation1 = new dashboard.components.textfield.TextFieldAnimation();
+        searchField = new dashboard.components.textfield.TextFieldAnimation();
         clearButton1 = new dashboard.components.table.swing.ClearButton();
         table = new dashboard.components.tabledrawer.TableCustomer();
         addCustomerBtn = new dialog.custom.ButtonCustom();
 
         setBackground(new java.awt.Color(242, 242, 242));
 
-        textFieldAnimation1.setText("Search");
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
 
         clearButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dashboard/icon/reload.png"))); // NOI18N
         clearButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -152,7 +233,7 @@ public class CustomerForm extends javax.swing.JPanel {
             .addComponent(table, javax.swing.GroupLayout.DEFAULT_SIZE, 1018, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(295, 295, 295)
-                .addComponent(textFieldAnimation1, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -165,7 +246,7 @@ public class CustomerForm extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(textFieldAnimation1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(addCustomerBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -187,11 +268,15 @@ public class CustomerForm extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_clearButton1MouseClicked
 
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private dialog.custom.ButtonCustom addCustomerBtn;
     private dashboard.components.table.swing.ClearButton clearButton1;
+    private dashboard.components.textfield.TextFieldAnimation searchField;
     private dashboard.components.tabledrawer.TableCustomer table;
-    private dashboard.components.textfield.TextFieldAnimation textFieldAnimation1;
     // End of variables declaration//GEN-END:variables
 }

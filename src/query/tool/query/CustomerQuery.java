@@ -82,8 +82,8 @@ public class CustomerQuery {
         try {
             List<MCustomer> res = new ArrayList<>();
             PreparedStatement preSt = preSt = this.conn
-                        .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID WHERE C.Name LIKE '%?%'");
-            preSt.setString(1, nameSearch);
+                        .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID WHERE C.Name LIKE ?");
+            preSt.setString(1, "%" + nameSearch + "%");
             ResultSet rs = preSt.executeQuery();
             
             while(rs.next()){
