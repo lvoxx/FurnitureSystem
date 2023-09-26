@@ -78,6 +78,34 @@ public class CustomerQuery {
             throw new SQLException("Failed to get Customer List");
         }
     }
+    public List<MCustomer> selectMCustomerSearch(String nameSearch) throws SQLException {
+        try {
+            List<MCustomer> res = new ArrayList<>();
+            PreparedStatement preSt = preSt = this.conn
+                        .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID WHERE C.Name LIKE '%?%'");
+            preSt.setString(1, nameSearch);
+            ResultSet rs = preSt.executeQuery();
+            
+            while(rs.next()){
+                int customerID = rs.getInt("CustomerID");
+                int discountID = rs.getInt("DiscountID");
+                String name = rs.getString("Name");
+                String contactNo = rs.getString("ContactNo");
+                String address = rs.getString("Address");
+                Date dateAdded = rs.getDate("DateAdded");
+                int discount = rs.getInt("Discount");
+                String customerType = rs.getString("CustomerType");
+                
+                Customer tempC = new Customer(customerID, discountID, name, contactNo, address, dateAdded);
+                Discount tempD = new Discount(discountID, discount, customerType);
+                
+                res.add(new MCustomer(tempC, tempD));
+            }
+            return res;
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Customer List");
+        }
+    }
 
     public int insertCustomer(Customer customer) throws SQLException {
         try {
