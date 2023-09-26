@@ -5,27 +5,15 @@
 package dashboard.components.table.frame_view;
 
 import java.awt.Color;
-import java.sql.*;
-import java.util.Arrays;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import query.connect.Settings;
-import query.tool.model.Cost;
-import query.tool.model.CostCategory;
-import query.tool.model.User;
-import query.tool.query.CustomerQuery;
-import query.tool.query.DiscountQuery;
 
 /**
  *
  * @author Admin
  */
 public class CostViewFrame extends javax.swing.JFrame {
-
-    private Connection conn;
     private JFrame frame;
-    private CustomerQuery queryC;
-    private DiscountQuery queryD;
 
     private Object[] rowData;
     

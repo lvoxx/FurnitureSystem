@@ -5,15 +5,19 @@
 package dashboard.components.table.frame_edit;
 
 import java.awt.Color;
-import query.tool.model.Customer;
-import java.sql.*;
-import java.util.Arrays;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import java.sql.*;
 import query.connect.Settings;
-import query.tool.model.Discount;
-import query.tool.query.CustomerQuery;
-import query.tool.query.DiscountQuery;
+import query.tool.model.Cost;
+import query.tool.model.CostCategory;
+import query.tool.query.CostCategoryQuery;
+import query.tool.query.CostQuery;
+import query.tool.query.UserQuery;
 
 /**
  *
@@ -21,16 +25,14 @@ import query.tool.query.DiscountQuery;
  */
 public class CostEditFrame extends javax.swing.JFrame {
 
-    private Connection conn;
     private JFrame frame;
-    private CustomerQuery queryC;
-    private DiscountQuery queryD;
+    private Connection conn;
+    private CostCategoryQuery query;
 
-    private int customerID;
-    private Customer cus;
-    private Discount dis;
+    private Object[] rowData;
+    private List<CostCategory> costCategory;
 
-    public CostEditFrame(int customerID) {
+    public CostEditFrame(Object[] data) {
         this.setUndecorated(true);
         this.getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         initComponents();
@@ -38,30 +40,39 @@ public class CostEditFrame extends javax.swing.JFrame {
         getContentPane().setBackground(Color.white);
         setLocationRelativeTo(null);
 
-        this.customerID = customerID;
+        try {
+            this.conn = Settings.BuildConnect();
+        } catch (SQLException ex) {
+            Logger.getLogger(CostEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.rowData = data;
         getData();
         setData();
     }
 
-    public void getData() {
-        try {
-            this.conn = Settings.BuildConnect();
-            queryC = new CustomerQuery(conn);
-            queryD = new DiscountQuery(conn);
-            cus = queryC.selectCustomer(Arrays.asList(customerID)).get(0);
-            dis = queryD.selectDiscount(Arrays.asList(cus.getDiscountID())).get(0);
-        } catch (SQLException ex) {
-            Settings.TryGetConnection(this, conn);
+    public void setData() {
+        costCategoryChoose.addItem(rowData[2].toString());
+        for (CostCategory i : costCategory) {
+            if (i.getCostCtgName().equals(rowData[2])) {
+                continue;
+            }
+            costCategoryChoose.addItem(i.getCostCtgName());
+
         }
+        creatorNameBox.setText(rowData[1].toString());
+        costIDBox.setText(rowData[0].toString());
+        expenseBox.setText(rowData[3].toString());
+        dateAddedBox.setText(rowData[4].toString());
     }
 
-    public void setData() {
-        address.setText(cus.getAddress());
-        contactNo.setText(cus.getContactNo());
-        cusName.setText(cus.getName());
-        cusType.setText(dis.getCustomerType());
-        dateAdded.setText(cus.getDateAdded().toString());
-        discount.setText(String.valueOf(dis.getDiscount()));
+    public void getData() {
+        try {
+            query = new CostCategoryQuery(this.conn);
+
+            costCategory = query.selectCostCategoryList();
+        } catch (SQLException ex) {
+            Logger.getLogger(CostEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -73,14 +84,14 @@ public class CostEditFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        cusType = new textfield.swing.TextField();
         jLabel1 = new javax.swing.JLabel();
-        cusName = new textfield.swing.TextField();
-        contactNo = new textfield.swing.TextField();
-        address = new textfield.swing.TextField();
-        dateAdded = new textfield.swing.TextField();
-        discount = new textfield.swing.TextField();
+        costIDBox = new textfield.swing.TextField();
+        creatorNameBox = new textfield.swing.TextField();
+        expenseBox = new textfield.swing.TextField();
+        dateAddedBox = new textfield.swing.TextField();
         closeBtn = new swing.MyButton();
+        costCategoryChoose = new dashboard.components.combobox.Combobox();
+        okBtn = new swing.MyButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -89,64 +100,67 @@ public class CostEditFrame extends javax.swing.JFrame {
             }
         });
 
-        cusType.setText("Customer Type");
-        cusType.setLabelText("Customer Type");
-        cusType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cusTypeActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 32)); // NOI18N
-        jLabel1.setText("Customer Info");
+        jLabel1.setText("Edit Cost Info");
 
-        cusName.setText("Name");
-        cusName.setLabelText("Customer Name");
-        cusName.addActionListener(new java.awt.event.ActionListener() {
+        costIDBox.setEditable(false);
+        costIDBox.setText("CostID");
+        costIDBox.setLabelText("Cost ID");
+        costIDBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cusNameActionPerformed(evt);
+                costIDBoxActionPerformed(evt);
             }
         });
 
-        contactNo.setText("Contact");
-        contactNo.setLabelText("Contact No");
-        contactNo.addActionListener(new java.awt.event.ActionListener() {
+        creatorNameBox.setEditable(false);
+        creatorNameBox.setText("Contact");
+        creatorNameBox.setLabelText("Creator Name");
+        creatorNameBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                contactNoActionPerformed(evt);
+                creatorNameBoxActionPerformed(evt);
             }
         });
 
-        address.setText("Address");
-        address.setLabelText("Address");
-        address.addActionListener(new java.awt.event.ActionListener() {
+        expenseBox.setText("Date Added");
+        expenseBox.setLabelText("Expense");
+        expenseBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addressActionPerformed(evt);
+                expenseBoxActionPerformed(evt);
             }
         });
 
-        dateAdded.setEditable(false);
-        dateAdded.setText("Date Added");
-        dateAdded.setLabelText("Date Added");
-        dateAdded.addActionListener(new java.awt.event.ActionListener() {
+        dateAddedBox.setEditable(false);
+        dateAddedBox.setText("Discount");
+        dateAddedBox.setLabelText("Date Added");
+        dateAddedBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateAddedActionPerformed(evt);
+                dateAddedBoxActionPerformed(evt);
             }
         });
 
-        discount.setText("Discount");
-        discount.setLabelText("Discount");
-        discount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                discountActionPerformed(evt);
-            }
-        });
-
-        closeBtn.setForeground(new java.awt.Color(0, 0, 0));
-        closeBtn.setText("Ok");
+        closeBtn.setBackground(new java.awt.Color(255, 0, 51));
+        closeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        closeBtn.setText("Cancel");
+        closeBtn.setColor(new java.awt.Color(255, 0, 51));
+        closeBtn.setColorOver(new java.awt.Color(255, 102, 102));
         closeBtn.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         closeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 closeBtnMouseClicked(evt);
+            }
+        });
+
+        costCategoryChoose.setLabeText("Cost Category");
+
+        okBtn.setBackground(new java.awt.Color(0, 255, 255));
+        okBtn.setForeground(new java.awt.Color(0, 0, 0));
+        okBtn.setText("Ok");
+        okBtn.setColor(new java.awt.Color(0, 255, 255));
+        okBtn.setColorOver(new java.awt.Color(102, 255, 255));
+        okBtn.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        okBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                okBtnMouseClicked(evt);
             }
         });
 
@@ -156,18 +170,22 @@ public class CostEditFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(discount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(dateAdded, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
-                            .addComponent(address, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dateAddedBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(expenseBox, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(contactNo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cusName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(cusType, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(creatorNameBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(costIDBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(costCategoryChoose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,48 +193,40 @@ public class CostEditFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(cusName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(costIDBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(contactNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(creatorNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(costCategoryChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(expenseBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(dateAdded, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cusType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addComponent(dateAddedBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cusTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cusTypeActionPerformed
+    private void costIDBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costIDBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cusTypeActionPerformed
+    }//GEN-LAST:event_costIDBoxActionPerformed
 
-    private void cusNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cusNameActionPerformed
+    private void creatorNameBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creatorNameBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cusNameActionPerformed
+    }//GEN-LAST:event_creatorNameBoxActionPerformed
 
-    private void contactNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contactNoActionPerformed
+    private void expenseBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expenseBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_contactNoActionPerformed
+    }//GEN-LAST:event_expenseBoxActionPerformed
 
-    private void addressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressActionPerformed
+    private void dateAddedBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateAddedBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_addressActionPerformed
-
-    private void dateAddedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateAddedActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateAddedActionPerformed
-
-    private void discountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_discountActionPerformed
+    }//GEN-LAST:event_dateAddedBoxActionPerformed
 
     private void closeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeBtnMouseClicked
         this.dispose();
@@ -226,15 +236,33 @@ public class CostEditFrame extends javax.swing.JFrame {
         frame.dispose();
     }//GEN-LAST:event_formWindowClosed
 
+    private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
+        try {
+            int userIDCreated = new UserQuery(this.conn).selectUserByName(rowData[1].toString()).get(0).getUserID();
+            int costCtgID = 0;
+            for (CostCategory i : costCategory) {
+                if (i.getCostCtgName().equals(costCategoryChoose.getSelectedItem())) {
+                    costCtgID = i.getCostCtgID();
+                    break;
+                }
+            }
+            new CostQuery(this.conn).updateCost(new Cost(Integer.valueOf(rowData[0].toString()), userIDCreated, costCtgID, Integer.valueOf(expenseBox.getText()), Date.valueOf(rowData[4].toString())));
+        } catch (SQLException ex) {
+            Logger.getLogger(CostEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        frame.dispose();
+    }//GEN-LAST:event_okBtnMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private textfield.swing.TextField address;
     private swing.MyButton closeBtn;
-    private textfield.swing.TextField contactNo;
-    private textfield.swing.TextField cusName;
-    private textfield.swing.TextField cusType;
-    private textfield.swing.TextField dateAdded;
-    private textfield.swing.TextField discount;
+    private dashboard.components.combobox.Combobox costCategoryChoose;
+    private textfield.swing.TextField costIDBox;
+    private textfield.swing.TextField creatorNameBox;
+    private textfield.swing.TextField dateAddedBox;
+    private textfield.swing.TextField expenseBox;
     private javax.swing.JLabel jLabel1;
+    private swing.MyButton okBtn;
     // End of variables declaration//GEN-END:variables
 }

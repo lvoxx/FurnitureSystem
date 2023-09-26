@@ -11,6 +11,7 @@ import query.tool.model.CostCategory;
 
 public class CostCategoryQuery {
     private final String SELECT = "SELECT * FROM tblCostCategory WHERE CostCtgID = ?";
+    private final String SELECT_ALL = "SELECT * FROM tblCostCategory";
     private final String INSERT = "EXEC proc_InsertCostCategory @CostCtgName = ?";
     private final String UPDATE = "EXEC proc_UpdateCostCategory @CostCtgID = ?, @CostCtgName = ?";
     private final String DELETE = "EXEC proc_DeleteCostCategory @CostCtgID = ?";
@@ -21,8 +22,8 @@ public class CostCategoryQuery {
     }
 
     public List<CostCategory> selectCostCategory(List<Integer> costCtgIDs) throws SQLException {
+        List<CostCategory> res = new ArrayList<>();
         try {
-            List<CostCategory> res = new ArrayList<>();
             PreparedStatement preSt;
             ResultSet rs;
             for (int i = 0; i < costCtgIDs.size(); ++i) {
@@ -34,11 +35,24 @@ public class CostCategoryQuery {
                     res.add(new CostCategory(rs.getInt("CostCtgID"), rs.getString("CostCtgName")));
                 }
             }
-
-            return res;
         } catch (SQLException ex) {
             throw new SQLException("Failed to get Cost Category ID: " + costCtgIDs.toString());
         }
+        return res;
+    }
+    
+    public List<CostCategory> selectCostCategoryList() throws SQLException {
+        List<CostCategory> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = conn.prepareStatement(SELECT_ALL);
+            ResultSet rs = preSt.executeQuery();
+            while(rs.next()){
+                res.add(new CostCategory(rs.getInt("CostCtgID"), rs.getString("CostCtgName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Cost Category List");
+        }
+        return res;
     }
 
     public int insertCostCategory(CostCategory costCtgIDs) throws SQLException {

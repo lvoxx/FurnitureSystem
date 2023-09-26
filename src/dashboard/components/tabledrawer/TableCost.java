@@ -10,11 +10,20 @@ import dashboard.components.table.frame_view.CostViewFrame;
 import dashboard.components.table.swing.TableActionCellEditor;
 import dashboard.components.table.swing.TableActionCellRender;
 import dashboard.components.table.swing.TableActionEvent;
+import dialog.message.MessageDialog;
 import java.awt.Component;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import query.connect.Settings;
+import query.tool.query.CostQuery;
 
 /**
  *
@@ -24,6 +33,7 @@ public class TableCost extends javax.swing.JPanel {
 
     private IData data;
     private final int ACTION_COLL = 5;
+    private JFrame frame;
 
     public TableCost() {
         initComponents();
@@ -39,6 +49,10 @@ public class TableCost extends javax.swing.JPanel {
         return table;
     }
 
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
     // ------------------------------------------------------------------------------------
     // EDIT HERE
     private void addRowEvent() {
@@ -46,35 +60,81 @@ public class TableCost extends javax.swing.JPanel {
         TableActionEvent event = new TableActionEvent() {
             @Override
             public void onEdit(int row) {
-                 //Get CostID by row index
-                String rowData = table.getModel().getValueAt(row, 0).toString();
-                
+                Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
+
                 //Init new JFrame to fill data
-                new CostEditFrame(Integer.valueOf(rowData)).show();
+                CostEditFrame costFrame = new CostEditFrame(rowData);
+                costFrame.addWindowListener(new WindowListener() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowDeactivated(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowOpened(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        data.refreshData();
+                    }
+
+                    @Override
+                    public void windowIconified(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowDeiconified(WindowEvent e) {
+
+                    }
+
+                    @Override
+                    public void windowActivated(WindowEvent e) {
+
+                    }
+
+                });
+                costFrame.show();
+
             }
 
             @Override
             public void onDelete(int row) {
-                if (table.isEditing()) {
-                    table.getCellEditor().stopCellEditing();
+                try {
+//                    if (table.isEditing()) {
+//                        table.getCellEditor().stopCellEditing();
+//                    }
+//                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+//                    model.removeRow(row);
+                    Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
+                    MessageDialog dialog = new MessageDialog(frame);
+                    dialog.showMessage("Delete cost id: " + rowData[0].toString(), "Deleted data cannot be recovered");
+                    if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
+                        //Delete row on SQL server
+
+                        CostQuery query = new CostQuery(Settings.BuildConnect());
+                        query.deleteCost(Integer.valueOf(rowData[0].toString()));
+                        //Refresh table in client
+                        data.refreshData();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(TableCost.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                model.removeRow(row);
-                
-                //Delete row on SQL server
-                
-                
-                //Refresh table in client
-                data.refreshData();
             }
 
             @Override
             public void onView(int row) {
                 //Get CustomerID by row index
-                
+
                 Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
-                
-                
+
                 //Init new JFrame to fill data
                 new CostViewFrame(rowData).show();
             }
@@ -93,16 +153,16 @@ public class TableCost extends javax.swing.JPanel {
         });
         //COLLUMN EFFECT END
     }
-    
+
     private Object[] getRowAt(int row, DefaultTableModel model) {
-    Object[] result = new Object[model.getColumnCount()];
+        Object[] result = new Object[model.getColumnCount()];
 
-     for (int i = 0; i < model.getColumnCount(); i++) {
-         result[i] = model.getValueAt(row, i);
-     }
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            result[i] = model.getValueAt(row, i);
+        }
 
-     return result;
-}
+        return result;
+    }
 
     // EDIT HERE
     // ------------------------------------------------------------------------------------ 

@@ -26,23 +26,28 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="closeBtn" min="-2" pref="117" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="discount" max="32767" attributes="0"/>
-                          <Component id="dateAdded" pref="378" max="32767" attributes="0"/>
-                          <Component id="address" alignment="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="dateAddedBox" max="32767" attributes="0"/>
+                          <Component id="expenseBox" pref="378" max="32767" attributes="0"/>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="contactNo" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cusName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="creatorNameBox" alignment="0" max="32767" attributes="0"/>
+                          <Component id="costIDBox" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="cusType" alignment="0" min="-2" pref="378" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="costCategoryChoose" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="closeBtn" min="-2" pref="117" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="okBtn" min="-2" pref="117" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -52,100 +57,122 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="cusName" min="-2" max="-2" attributes="0"/>
+              <Component id="costIDBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Component id="contactNo" min="-2" max="-2" attributes="0"/>
+              <Component id="creatorNameBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="costCategoryChoose" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              <Component id="expenseBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="address" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="dateAdded" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="discount" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="cusType" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="44" max="32767" attributes="0"/>
-              <Component id="closeBtn" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+              <Component id="dateAddedBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="117" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="closeBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="okBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="textfield.swing.TextField" name="cusType">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Customer Type"/>
-        <Property name="labelText" type="java.lang.String" value="Customer Type"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cusTypeActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="sansserif" size="32" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Customer Info"/>
+        <Property name="text" type="java.lang.String" value="Edit Cost Info"/>
       </Properties>
     </Component>
-    <Component class="textfield.swing.TextField" name="cusName">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Name"/>
-        <Property name="labelText" type="java.lang.String" value="Customer Name"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cusNameActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="textfield.swing.TextField" name="contactNo">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Contact"/>
-        <Property name="labelText" type="java.lang.String" value="Contact No"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="contactNoActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="textfield.swing.TextField" name="address">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Address"/>
-        <Property name="labelText" type="java.lang.String" value="Address"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addressActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="textfield.swing.TextField" name="dateAdded">
+    <Component class="textfield.swing.TextField" name="costIDBox">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" value="CostID"/>
+        <Property name="labelText" type="java.lang.String" value="Cost ID"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="costIDBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="textfield.swing.TextField" name="creatorNameBox">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" value="Contact"/>
+        <Property name="labelText" type="java.lang.String" value="Creator Name"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="creatorNameBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="textfield.swing.TextField" name="expenseBox">
+      <Properties>
         <Property name="text" type="java.lang.String" value="Date Added"/>
+        <Property name="labelText" type="java.lang.String" value="Expense"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="expenseBoxActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="textfield.swing.TextField" name="dateAddedBox">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="text" type="java.lang.String" value="Discount"/>
         <Property name="labelText" type="java.lang.String" value="Date Added"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dateAddedActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="textfield.swing.TextField" name="discount">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Discount"/>
-        <Property name="labelText" type="java.lang.String" value="Discount"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="discountActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dateAddedBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="swing.MyButton" name="closeBtn">
       <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Ok"/>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="ff" type="rgb"/>
+        </Property>
+        <Property name="colorOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="ff" type="rgb"/>
+        </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="sansserif" size="14" style="1"/>
         </Property>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeBtnMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="dashboard.components.combobox.Combobox" name="costCategoryChoose">
+      <Properties>
+        <Property name="labeText" type="java.lang.String" value="Cost Category"/>
+      </Properties>
+    </Component>
+    <Component class="swing.MyButton" name="okBtn">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="0" type="rgb"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Ok"/>
+        <Property name="color" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="0" type="rgb"/>
+        </Property>
+        <Property name="colorOver" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="66" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="sansserif" size="14" style="1"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="okBtnMouseClicked"/>
       </Events>
     </Component>
   </SubComponents>

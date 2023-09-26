@@ -24,8 +24,8 @@ public class CostQuery {
     }
 
     public List<Cost> selectCost(List<Integer> costIDs) throws SQLException {
+        List<Cost> res = new ArrayList<>();
         try {
-            List<Cost> res = new ArrayList<>();
             PreparedStatement preSt;
             ResultSet rs;
             for (int i = 0; i < costIDs.size(); ++i) {
@@ -41,11 +41,10 @@ public class CostQuery {
                             rs.getDate("DateCreated")));
                 }
             }
-
-            return res;
         } catch (SQLException ex) {
             throw new SQLException("Failed to get Cost ID: " + costIDs.toString());
         }
+        return res;
     }
 
     public int insertCost(Cost cost) throws SQLException {
@@ -81,15 +80,15 @@ public class CostQuery {
         return -1;
     }
 
-    public int deleteCost(Cost cost) throws SQLException {
+    public int deleteCost(int costID) throws SQLException {
         try {
             PreparedStatement preSt = this.conn.prepareStatement(DELETE);
-            preSt.setInt(1, cost.getCostID());
+            preSt.setInt(1, costID);
             if (preSt.execute()) {
                 return 1;
             }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to delete the cost with id: " + cost.getCostID());
+            throw new SQLException("Failed to delete the cost with id: " + costID);
         }
         return -1;
     }

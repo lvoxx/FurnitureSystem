@@ -103,8 +103,11 @@ public class CostForm extends javax.swing.JPanel {
                 }
             }
         };
+        
+        
+        //Settings
         table.setData(data);
-
+        table.setFrame(frame);
     }
 
     private void loadData() {
