@@ -21,35 +21,91 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" pref="388" max="32767" attributes="0"/>
+          <Component id="table" alignment="0" pref="1018" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace min="-2" pref="295" max="-2" attributes="0"/>
+              <Component id="searchField" min="-2" pref="445" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+              <Component id="addCustomerBtn1" min="-2" pref="169" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="addCustomerBtn" min="-2" pref="184" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="clearButton1" min="-2" pref="44" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="128" max="-2" attributes="0"/>
-              <Component id="jLabel1" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="searchField" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                      <Component id="addCustomerBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="addCustomerBtn1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="clearButton1" alignment="1" min="-2" pref="38" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="table" min="-2" pref="534" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="dashboard.components.textfield.TextFieldAnimation" name="searchField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchFieldActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="dashboard.components.table.swing.ClearButton" name="clearButton1">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="sansserif" size="36" style="0"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/dashboard/icon/reload.png"/>
         </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="6a" green="6a" red="6a" type="rgb"/>
-        </Property>
-        <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Cost"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="clearButton1MouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="dashboard.components.tabledrawer.TableCost" name="table">
+    </Component>
+    <Component class="dialog.custom.ButtonCustom" name="addCustomerBtn">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="33" red="33" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Add New Cost Category"/>
+        <Property name="actionCommand" type="java.lang.String" value="Add New Cost Category"/>
+        <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="66" red="66" type="rgb"/>
+        </Property>
+        <Property name="colorPressed" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="cc" green="0" red="0" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="sansserif" size="12" style="1"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCustomerBtnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="dialog.custom.ButtonCustom" name="addCustomerBtn1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Add New Customer"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="sansserif" size="12" style="1"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCustomerBtn1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

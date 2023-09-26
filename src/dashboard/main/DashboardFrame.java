@@ -31,7 +31,7 @@ public class DashboardFrame extends javax.swing.JFrame {
     private OrderForm orderForm;
     private CostInvoiceForm costInvoiceForm;
     private WarehouseForm warehouseForm;
-    private CustomerForm customerForm;
+    //private CustomerForm customerForm;
     private CostForm costForm;
     private StaffForm staffForm;
     private ProductForm productForm;
@@ -69,8 +69,8 @@ public class DashboardFrame extends javax.swing.JFrame {
         orderForm = new OrderForm();
         costInvoiceForm = new CostInvoiceForm();
         warehouseForm = new WarehouseForm();
-        customerForm = new CustomerForm(frame);
-        costForm = new CostForm();
+        costForm = new CostForm(frame);
+        //customerForm = new CustomerForm();
         staffForm = new StaffForm();
         productForm = new ProductForm();
         stockForm = new StockForm();
@@ -109,10 +109,10 @@ public class DashboardFrame extends javax.swing.JFrame {
                         setForm(warehouseForm);                 //Warehouse
                         break;
                     }
-                    case 6: {
-                        setForm(customerForm);                 //Customer
-                        break;
-                    }
+//                    case 6: {
+//                        setForm(customerForm);                 //Customer
+//                        break;
+//                    }
                     case 7: {
                         setForm(costForm);                 //Cost
                         break;

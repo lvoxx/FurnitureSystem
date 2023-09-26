@@ -5,8 +5,8 @@
 package dashboard.components.tabledrawer;
 
 import dashboard.components.table.controllers.IData;
-import dashboard.components.table.frame_edit.CustomerEditFrame;
-import dashboard.components.table.frame_view.CustomerViewFrame;
+import dashboard.components.table.frame_edit.CostEditFrame;
+import dashboard.components.table.frame_view.CostViewFrame;
 import dashboard.components.table.swing.TableActionCellEditor;
 import dashboard.components.table.swing.TableActionCellRender;
 import dashboard.components.table.swing.TableActionEvent;
@@ -20,11 +20,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Admin
  */
-public class TableCustomer extends javax.swing.JPanel {
+public class TableCost extends javax.swing.JPanel {
 
     private IData data;
+    private final int ACTION_COLL = 5;
 
-    public TableCustomer() {
+    public TableCost() {
         initComponents();
         addRowEvent();
     }
@@ -45,11 +46,11 @@ public class TableCustomer extends javax.swing.JPanel {
         TableActionEvent event = new TableActionEvent() {
             @Override
             public void onEdit(int row) {
-                 //Get CustomerID by row index
+                 //Get CostID by row index
                 String rowData = table.getModel().getValueAt(row, 0).toString();
                 
                 //Init new JFrame to fill data
-                new CustomerEditFrame(Integer.valueOf(rowData)).show();
+                new CostEditFrame(Integer.valueOf(rowData)).show();
             }
 
             @Override
@@ -59,22 +60,27 @@ public class TableCustomer extends javax.swing.JPanel {
                 }
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.removeRow(row);
-
+                
+                //Delete row on SQL server
+                
+                
+                //Refresh table in client
                 data.refreshData();
             }
 
             @Override
             public void onView(int row) {
                 //Get CustomerID by row index
-                String rowData = table.getModel().getValueAt(row, 0).toString();
+                
+                Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
                 
                 
                 //Init new JFrame to fill data
-                new CustomerViewFrame(Integer.valueOf(rowData)).show();
+                new CostViewFrame(rowData).show();
             }
         };
-        table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
-        table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
+        table.getColumnModel().getColumn(ACTION_COLL).setCellRenderer(new TableActionCellRender());
+        table.getColumnModel().getColumn(ACTION_COLL).setCellEditor(new TableActionCellEditor(event));
         //COLLUMN EDITTOR END
 
         //COLLUM EFFECT START
@@ -87,6 +93,16 @@ public class TableCustomer extends javax.swing.JPanel {
         });
         //COLLUMN EFFECT END
     }
+    
+    private Object[] getRowAt(int row, DefaultTableModel model) {
+    Object[] result = new Object[model.getColumnCount()];
+
+     for (int i = 0; i < model.getColumnCount(); i++) {
+         result[i] = model.getValueAt(row, i);
+     }
+
+     return result;
+}
 
     // EDIT HERE
     // ------------------------------------------------------------------------------------ 
@@ -103,14 +119,14 @@ public class TableCustomer extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Name", "Address", "ContactNo", "Date Added", "Discount", "Type", "Action"
+                "ID", "Creator Name", "Cost Category", "Expense", "Date Added", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
