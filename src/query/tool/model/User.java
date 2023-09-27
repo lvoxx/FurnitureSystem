@@ -29,6 +29,20 @@ public class User {
         this.password = password;
         this.recoveryKey = recoveryKey;
     }
+    public User(String name, String address, String contactNo, String role, int dpmID,
+            boolean orderManagePermission, String username, String password, String recoveryKey) {
+        
+        this.name = name;
+        this.address = address;
+        this.contactNo = contactNo;
+        this.role = role;
+        
+        this.dpmID = dpmID;
+        this.orderManagePermission = orderManagePermission;
+        this.username = username;
+        this.password = password;
+        this.recoveryKey = recoveryKey;
+    }
 
     public int getUserID() {
         return this.userID;

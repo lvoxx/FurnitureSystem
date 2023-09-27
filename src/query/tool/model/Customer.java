@@ -18,7 +18,22 @@ public class Customer {
         this.address = address;
         this.dateAdded = dateAdded;
     }
-
+    public Customer(int discountID, String name, String contactNo, String address) {        
+        this.discountID = discountID;
+        this.name = name;
+        this.contactNo = contactNo;
+        this.address = address;
+    }
+    public Customer(int customerID, int discountID, String name, String contactNo, String address) {
+        this.customerID = customerID;
+        this.discountID = discountID;
+        this.name = name;
+        this.contactNo = contactNo;
+        this.address = address;
+    }
+    public Customer(int customerID) {
+        this.customerID = customerID;
+    }
     @Override
     public String toString() {
         return "{" +

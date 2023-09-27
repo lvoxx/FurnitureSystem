@@ -5,6 +5,19 @@
  */
 package dashboard.form;
 
+import dashboard.manage.customer.AddCustomer;
+import dashboard.manage.staff.AddStaff;
+import dashboard.manage.staff.DeleteStaff;
+import dashboard.manage.staff.UpdateStaff;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import query.connect.Settings;
+
 /**
  *
  * @author RAVEN
@@ -16,6 +29,97 @@ public class StaffForm extends javax.swing.JPanel {
      */
     public StaffForm() {
         initComponents();
+        loadDataTable();
+        
+        
+        
+    }
+    
+    
+    public void loadDataTable(){
+        
+        Connection conn;
+        PreparedStatement preparedStatement;
+        ResultSet rs;
+        
+        try {
+            conn = Settings.BuildConnect();
+            preparedStatement = conn.prepareStatement("SELECT * FROM tblUser");
+            rs = preparedStatement.executeQuery();
+            
+            DefaultTableModel model = (DefaultTableModel) tableValueAll.getModel();
+            
+            while(rs.next()){
+                Object ObjList[] = {
+                    rs.getInt("UserID"), rs.getString("Name"), rs.getString("Address"), rs.getString("ContactNo"), rs.getString("Role"), rs.getDate("DateAdded"), rs.getInt("DpmID"), rs.getInt("OrderManagePermission"), rs.getString("Username"), rs.getString("Password"), rs.getString("RecoveryKey")
+                };
+                model.addRow(ObjList);
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void searchDataTable(String name){
+        
+        Connection conn;
+        PreparedStatement preparedStatement;
+        ResultSet rs;
+        
+        try {
+            conn = Settings.BuildConnect();
+            preparedStatement = conn.prepareStatement("SELECT * FROM tblUser WHERE Name = ?");
+            preparedStatement.setString(1, name);
+            rs = preparedStatement.executeQuery();
+            
+            DefaultTableModel model = (DefaultTableModel) tableValueAll.getModel();
+            
+            
+            while(model.getRowCount() > 0) {
+                model.removeRow(0);
+            }
+            
+            
+            while(rs.next()){
+                Object ObjList[] = {
+                    rs.getInt("UserID"), rs.getString("Name"), rs.getString("Address"), rs.getString("ContactNo"), rs.getString("Role"), rs.getDate("DateAdded"), rs.getInt("DpmID"), rs.getInt("OrderManagePermission"), rs.getString("Username"), rs.getString("Password"), rs.getString("RecoveryKey")};
+                model.addRow(ObjList);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void reloadDataTable(){
+        
+        Connection conn;
+        PreparedStatement preparedStatement;
+        ResultSet rs;
+        
+        try {
+            conn = Settings.BuildConnect();
+            preparedStatement = conn.prepareStatement("SELECT * FROM tblUser");
+            rs = preparedStatement.executeQuery();
+            
+            DefaultTableModel model = (DefaultTableModel) tableValueAll.getModel();
+            
+            while(model.getRowCount() > 0) {
+                model.removeRow(0);
+            } 
+            
+            while(rs.next()){
+                Object ObjList[] = {
+                    rs.getInt("UserID"), rs.getString("Name"), rs.getString("Address"), rs.getString("ContactNo"), rs.getString("Role"), rs.getDate("DateAdded"), rs.getInt("DpmID"), rs.getInt("OrderManagePermission"), rs.getString("Username"), rs.getString("Password"), rs.getString("RecoveryKey")};
+                model.addRow(ObjList);
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AddCustomer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,35 +131,187 @@ public class StaffForm extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        mainPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableValueAll = new javax.swing.JTable();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        textSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnReload = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(242, 242, 242));
 
-        jLabel1.setFont(new java.awt.Font("sansserif", 0, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(106, 106, 106));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Staff");
+        tableValueAll.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "UserID", "Name", "Address", "ContactNo", "Role", "DateAdded", "DpmID", "OrderManagePermission", "Username", "Password", "RecoveryKey"
+            }
+        ));
+        jScrollPane1.setViewportView(tableValueAll);
+
+        btnAdd.setBackground(new java.awt.Color(153, 255, 153));
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAdd.setText("Add");
+        btnAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddMouseClicked(evt);
+            }
+        });
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(255, 255, 153));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUpdateMouseClicked(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 153, 153));
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteMouseClicked(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(204, 204, 255));
+        btnSearch.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSearch.setText("Search");
+        btnSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSearchMouseClicked(evt);
+            }
+        });
+
+        btnReload.setBackground(new java.awt.Color(51, 255, 204));
+        btnReload.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnReload.setText("reload");
+        btnReload.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnReloadMouseClicked(evt);
+            }
+        });
+        btnReload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReloadActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnReload)
+                .addContainerGap())
+            .addComponent(jScrollPane1)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(textSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSearch)
+                .addContainerGap(583, Short.MAX_VALUE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addGap(42, 42, 42)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnDelete)
+                    .addComponent(btnReload))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(128, 128, 128)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(125, 125, 125))
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReloadActionPerformed
+
+    private void btnSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseClicked
+        // TODO add your handling code here:
+        
+        String name = textSearch.getText();
+        searchDataTable(name);
+    }//GEN-LAST:event_btnSearchMouseClicked
+
+    private void btnReloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReloadMouseClicked
+        // TODO add your handling code here:
+        
+        reloadDataTable();
+    }//GEN-LAST:event_btnReloadMouseClicked
+
+    private void btnAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddMouseClicked
+        // TODO add your handling code here:
+        
+        AddStaff addS = new AddStaff();
+        addS.setVisible(true);
+    }//GEN-LAST:event_btnAddMouseClicked
+
+    private void btnUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateMouseClicked
+        // TODO add your handling code here:
+        
+        UpdateStaff updateS = new UpdateStaff();
+        updateS.setVisible(true);
+       
+    }//GEN-LAST:event_btnUpdateMouseClicked
+
+    private void btnDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMouseClicked
+        // TODO add your handling code here:
+        DeleteStaff deleteS = new DeleteStaff();
+        deleteS.setVisible(true);
+        
+    }//GEN-LAST:event_btnDeleteMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnReload;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JTable tableValueAll;
+    private javax.swing.JTextField textSearch;
     // End of variables declaration//GEN-END:variables
 }

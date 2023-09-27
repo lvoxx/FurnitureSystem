@@ -21,6 +21,24 @@ public class Stock {
         this.status = status;
         this.dateAdded = dateAdded;
     }
+    public Stock(int stockID, String stockName, int quantity, int stockCtgID, int supplierID, String status) {
+        this.stockID = stockID;
+        this.stockName = stockName;
+        this.quantity = quantity;
+        this.stockCtgID = stockCtgID;
+        this.supplierID = supplierID;
+        this.status = status;
+    }
+    public Stock(String stockName, int quantity, int stockCtgID, int supplierID, String status) {
+        this.stockName = stockName;
+        this.quantity = quantity;
+        this.stockCtgID = stockCtgID;
+        this.supplierID = supplierID;
+        this.status = status;
+    }
+    public Stock(int stockID) {
+        this.stockID = stockID;
+    }
 
     public int getStockID() {
         return this.stockID;
