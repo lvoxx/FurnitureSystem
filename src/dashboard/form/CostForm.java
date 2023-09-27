@@ -7,8 +7,12 @@ package dashboard.form;
 
 import dashboard.components.model.*;
 import dashboard.components.table.controllers.IData;
+import dashboard.components.table.controllers.ISettings;
+import dashboard.components.table.frame_add.CostAddFrame;
 import dashboard.components.textfield.EventCallBack;
 import dashboard.components.textfield.EventTextField;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import java.sql.*;
 import java.util.List;
@@ -27,9 +31,11 @@ public class CostForm extends javax.swing.JPanel {
     private CostQuery queryC;
     private List<MCost> costs;
     private IData data;
+    private ISettings settings;
 
-    public CostForm(JFrame frame) {
+    public CostForm(JFrame frame, ISettings settings) {
         this.frame = frame;
+        this.settings = settings;
         initComponents();
         //Get Cust Data From Database
         try {
@@ -37,7 +43,7 @@ public class CostForm extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(CostForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         searchField.addEvent(new EventTextField() {
             @Override
             public void onPressed(EventCallBack call) {
@@ -51,13 +57,14 @@ public class CostForm extends javax.swing.JPanel {
                     } catch (Exception e) {
                         System.err.println(e);
                     }
-                    
+
                     //Do search
                     reloadDataFromSearch();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CostForm.class.getName()).log(Level.SEVERE, null,ex);
+                    Logger.getLogger(CostForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
             @Override
             public void onKeyEnterPressed(EventCallBack call) {
                 try {
@@ -70,11 +77,11 @@ public class CostForm extends javax.swing.JPanel {
                     } catch (Exception e) {
                         System.err.println(e);
                     }
-                    
+
                     //Do search
                     reloadDataFromSearch();
                 } catch (SQLException ex) {
-                    Logger.getLogger(CostForm.class.getName()).log(Level.SEVERE, null,ex);
+                    Logger.getLogger(CostForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -103,8 +110,7 @@ public class CostForm extends javax.swing.JPanel {
                 }
             }
         };
-        
-        
+
         //Settings
         table.setData(data);
         table.setFrame(frame);
@@ -117,7 +123,7 @@ public class CostForm extends javax.swing.JPanel {
             String userIDCreated = item.getUserNameCreated();
             Cost cost = item.getCost();
             CostCategory costCategory = item.getCostCategory();
-            
+
             model.addRow(new Object[]{cost.getCostID(), userIDCreated, costCategory.getCostCtgName(), cost.getExpense(), cost.getDateCreated()});
         });
         model.fireTableDataChanged();
@@ -134,7 +140,7 @@ public class CostForm extends javax.swing.JPanel {
         //model.fireTableDataChanged();
         getCostDataFromDB();
         loadData();
-        
+
     }
 
     private void getCostDataFromDB() throws SQLException {
@@ -151,7 +157,7 @@ public class CostForm extends javax.swing.JPanel {
         }
         this.costs = queryC.selectMCostList();
     }
-    
+
     private void reloadDataFromSearch() throws SQLException {
         //Remove All
         DefaultTableModel model = (DefaultTableModel) table.getTable().getModel();
@@ -163,7 +169,7 @@ public class CostForm extends javax.swing.JPanel {
         getCostDataBySearching(searchField.getText());
         loadData();
     }
-    
+
     private void getCostDataBySearching(String searchName) throws SQLException {
         //Load All Data from server
         try {
@@ -229,6 +235,11 @@ public class CostForm extends javax.swing.JPanel {
 
         addCustomerBtn1.setText("Add New Customer");
         addCustomerBtn1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        addCustomerBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                addCustomerBtn1MouseClicked(evt);
+            }
+        });
         addCustomerBtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addCustomerBtn1ActionPerformed(evt);
@@ -288,6 +299,49 @@ public class CostForm extends javax.swing.JPanel {
     private void addCustomerBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerBtn1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addCustomerBtn1ActionPerformed
+
+    private void addCustomerBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addCustomerBtn1MouseClicked
+        //Init new JFrame to fill data
+        CostAddFrame costFrame = new CostAddFrame(settings.getUser());
+        costFrame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                data.refreshData();
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+        });
+        costFrame.show();
+    }//GEN-LAST:event_addCustomerBtn1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

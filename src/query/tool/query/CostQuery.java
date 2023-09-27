@@ -47,18 +47,18 @@ public class CostQuery {
         return res;
     }
 
-    public int insertCost(Cost cost) throws SQLException {
+    public int insertCost(int userIDCreated, int costCtgID, int expense) throws SQLException {
         try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(INSERT);
-            preSt.setInt(1, cost.getUserIDCreated());
-            preSt.setInt(2, cost.getCostCtgID());
-            preSt.setInt(3, cost.getExpense());
+            preSt.setInt(1, userIDCreated);
+            preSt.setInt(2, costCtgID);
+            preSt.setInt(3, expense);
             if (preSt.executeUpdate() == 1) {
                 return 1;
             }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to insert the cost " + cost.toString());
+            throw new SQLException("Failed to insert the cost");
         }
         return -1;
     }

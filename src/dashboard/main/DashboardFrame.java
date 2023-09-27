@@ -5,6 +5,7 @@
  */
 package dashboard.main;
 
+import dashboard.components.table.controllers.ISettings;
 import dashboard.event.EventMenuSelected;
 import dashboard.form.*;
 import dialog.message.MessageDialog;
@@ -43,6 +44,7 @@ public class DashboardFrame extends javax.swing.JFrame {
     private Connection conn;
 
     private User user;
+    private ISettings iSettings;
 
     public DashboardFrame(User user) {
         initComponents();
@@ -59,17 +61,23 @@ public class DashboardFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(DashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        //For getter
+        iSettings = new ISettings() {
+            @Override
+            public User getUser() {
+                return user;
+            }
+        };
+        
         setForm();
-        //Load database from server
-        loadDatabase();
 
         //setBackground(new Color(0, 0, 0, 0));
         home = new DashboardHome();
         orderForm = new OrderForm();
         costInvoiceForm = new CostInvoiceForm();
         warehouseForm = new WarehouseForm();
-        costForm = new CostForm(frame);
+        costForm = new CostForm(frame, iSettings);
         //customerForm = new CustomerForm();
         staffForm = new StaffForm();
         productForm = new ProductForm();
@@ -187,8 +195,8 @@ public class DashboardFrame extends javax.swing.JFrame {
         notif.showNotification();
     }
 
-    private void loadDatabase() {
-
+    public User getUser() {
+        return this.user;
     }
 
     private void setForm(JComponent com) {
