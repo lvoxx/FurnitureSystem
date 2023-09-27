@@ -12,9 +12,9 @@ import query.tool.model.CostCategory;
 public class CostCategoryQuery {
     private final String SELECT = "SELECT * FROM tblCostCategory WHERE CostCtgID = ?";
     private final String SELECT_ALL = "SELECT * FROM tblCostCategory";
-    private final String INSERT = "EXEC proc_InsertCostCategory @CostCtgName = ?";
-    private final String UPDATE = "EXEC proc_UpdateCostCategory @CostCtgID = ?, @CostCtgName = ?";
-    private final String DELETE = "EXEC proc_DeleteCostCategory @CostCtgID = ?";
+    private final String INSERT = "INSERT INTO tblCostCategory VALUES (?)";
+    private final String UPDATE = "UPDATE tblCostCategory SET [CostCtgName] = ? WHERE [CostCtgID] = ?";
+    private final String DELETE = "DELETE FROM tblCostCategory WHERE [CostCtgID] = ?";
     private Connection conn;
 
     public CostCategoryQuery(Connection conn) {
@@ -55,15 +55,15 @@ public class CostCategoryQuery {
         return res;
     }
 
-    public int insertCostCategory(CostCategory costCtgIDs) throws SQLException {
+    public int insertCostCategory(String costCategoryName) throws SQLException {
         try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(INSERT);
-            preSt.setString(1, costCtgIDs.getCostCtgName());
+            preSt.setString(1, costCategoryName);
             if (preSt.executeUpdate() == 1)
                 return 1;
         } catch (SQLException ex) {
-            throw new SQLException("Failed to insert the cost category " + costCtgIDs.toString());
+            throw new SQLException("Failed to insert the cost category: " + costCategoryName);
         }
         return -1;
     }

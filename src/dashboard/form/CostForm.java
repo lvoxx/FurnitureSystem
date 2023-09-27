@@ -9,6 +9,7 @@ import dashboard.components.model.*;
 import dashboard.components.table.controllers.IData;
 import dashboard.components.table.controllers.ISettings;
 import dashboard.components.table.frame_add.CostAddFrame;
+import dashboard.components.table.frame_add.CostCategoryAddFrame;
 import dashboard.components.textfield.EventCallBack;
 import dashboard.components.textfield.EventTextField;
 import java.awt.event.WindowEvent;
@@ -203,7 +204,7 @@ public class CostForm extends javax.swing.JPanel {
         searchField = new dashboard.components.textfield.TextFieldAnimation();
         clearButton1 = new dashboard.components.table.swing.ClearButton();
         table = new dashboard.components.tabledrawer.TableCost();
-        addCustomerBtn = new dialog.custom.ButtonCustom();
+        addCostCategoryBtn = new dialog.custom.ButtonCustom();
         addCustomerBtn1 = new dialog.custom.ButtonCustom();
 
         setBackground(new java.awt.Color(242, 242, 242));
@@ -221,15 +222,14 @@ public class CostForm extends javax.swing.JPanel {
             }
         });
 
-        addCustomerBtn.setBackground(new java.awt.Color(51, 51, 255));
-        addCustomerBtn.setText("Add New Cost Category");
-        addCustomerBtn.setActionCommand("Add New Cost Category");
-        addCustomerBtn.setColorHover(new java.awt.Color(102, 102, 255));
-        addCustomerBtn.setColorPressed(new java.awt.Color(0, 0, 204));
-        addCustomerBtn.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        addCustomerBtn.addActionListener(new java.awt.event.ActionListener() {
+        addCostCategoryBtn.setBackground(new java.awt.Color(51, 51, 255));
+        addCostCategoryBtn.setText("Add New Cost Category");
+        addCostCategoryBtn.setColorHover(new java.awt.Color(102, 102, 255));
+        addCostCategoryBtn.setColorPressed(new java.awt.Color(0, 0, 204));
+        addCostCategoryBtn.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        addCostCategoryBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCustomerBtnActionPerformed(evt);
+                addCostCategoryBtnActionPerformed(evt);
             }
         });
 
@@ -259,7 +259,7 @@ public class CostForm extends javax.swing.JPanel {
                 .addGap(16, 16, 16)
                 .addComponent(addCustomerBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addCustomerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(addCostCategoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(clearButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -272,7 +272,7 @@ public class CostForm extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(addCustomerBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addCostCategoryBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(addCustomerBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(clearButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -280,9 +280,47 @@ public class CostForm extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addCustomerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_addCustomerBtnActionPerformed
+    private void addCostCategoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCostCategoryBtnActionPerformed
+        CostCategoryAddFrame costCtgFrame = new CostCategoryAddFrame();
+        costCtgFrame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                data.refreshData();
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+        });
+        costCtgFrame.show();
+    }//GEN-LAST:event_addCostCategoryBtnActionPerformed
 
     private void clearButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clearButton1MouseClicked
         try {
@@ -345,7 +383,7 @@ public class CostForm extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private dialog.custom.ButtonCustom addCustomerBtn;
+    private dialog.custom.ButtonCustom addCostCategoryBtn;
     private dialog.custom.ButtonCustom addCustomerBtn1;
     private dashboard.components.table.swing.ClearButton clearButton1;
     private dashboard.components.textfield.TextFieldAnimation searchField;

@@ -31,7 +31,7 @@
               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               <Component id="addCustomerBtn1" min="-2" pref="169" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="addCustomerBtn" min="-2" pref="184" max="-2" attributes="0"/>
+              <Component id="addCostCategoryBtn" min="-2" pref="184" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="clearButton1" min="-2" pref="44" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -46,7 +46,7 @@
               <EmptySpace pref="39" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" alignment="1" groupAlignment="3" attributes="0">
-                      <Component id="addCustomerBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="addCostCategoryBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="addCustomerBtn1" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="clearButton1" alignment="1" min="-2" pref="38" max="-2" attributes="0"/>
@@ -75,13 +75,12 @@
     </Component>
     <Component class="dashboard.components.tabledrawer.TableCost" name="table">
     </Component>
-    <Component class="dialog.custom.ButtonCustom" name="addCustomerBtn">
+    <Component class="dialog.custom.ButtonCustom" name="addCostCategoryBtn">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="33" red="33" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Add New Cost Category"/>
-        <Property name="actionCommand" type="java.lang.String" value="Add New Cost Category"/>
         <Property name="colorHover" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="66" red="66" type="rgb"/>
         </Property>
@@ -93,7 +92,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCustomerBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCostCategoryBtnActionPerformed"/>
       </Events>
     </Component>
     <Component class="dialog.custom.ButtonCustom" name="addCustomerBtn1">
