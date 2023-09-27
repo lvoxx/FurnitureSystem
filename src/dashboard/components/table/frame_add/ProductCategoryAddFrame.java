@@ -6,65 +6,39 @@ package dashboard.components.table.frame_add;
 
 import java.awt.Color;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import java.sql.*;
 import query.connect.Settings;
-import query.tool.model.Cost;
-import query.tool.model.CostCategory;
-import query.tool.model.User;
-import query.tool.query.CostCategoryQuery;
-import query.tool.query.CostQuery;
-import query.tool.query.UserQuery;
+import query.tool.query.ProductCategoryQuery;
 
 /**
  *
  * @author Admin
  */
-public class CostAddFrame extends javax.swing.JFrame {
-
+public class ProductCategoryAddFrame extends javax.swing.JFrame {
+    
     private JFrame frame;
     private Connection conn;
-    private CostCategoryQuery query;
-
-    private User user;
-    private List<CostCategory> costCategory;
-
-    public CostAddFrame(User user) {
+    
+    private boolean isInvalid = false;
+    
+    public ProductCategoryAddFrame() {
         this.setUndecorated(true);
         this.getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         initComponents();
         this.frame = this;
         getContentPane().setBackground(Color.white);
         setLocationRelativeTo(null);
-        alert.setVisible(false);
-
+        closeBtn.setEnabled(false);
+        alertProCtg.setVisible(false);
+        
         try {
             this.conn = Settings.BuildConnect();
         } catch (SQLException ex) {
-            Logger.getLogger(CostAddFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.user = user;
-        getData();
-        setData();
-    }
-
-    public void setData() {
-        for (CostCategory i : costCategory) {
-            costCategoryChoose.addItem(i.getCostCtgName());
-        }
-        creatorNameBox.setText(user.getName());
-    }
-
-    public void getData() {
-        try {
-            query = new CostCategoryQuery(this.conn);
-            costCategory = query.selectCostCategoryList();
-        } catch (SQLException ex) {
-            Logger.getLogger(CostAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -78,12 +52,10 @@ public class CostAddFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        creatorNameBox = new textfield.swing.TextField();
-        expenseBox = new textfield.swing.TextField();
+        categoryNameBox = new textfield.swing.TextField();
         closeBtn = new swing.MyButton();
-        costCategoryChoose = new dashboard.components.combobox.Combobox();
         okBtn = new swing.MyButton();
-        alert = new javax.swing.JLabel();
+        alertProCtg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -93,26 +65,17 @@ public class CostAddFrame extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 32)); // NOI18N
-        jLabel1.setText("New Cost Info");
+        jLabel1.setText("Add Product Category ");
 
-        creatorNameBox.setEditable(false);
-        creatorNameBox.setLabelText("Creator Name");
-        creatorNameBox.addActionListener(new java.awt.event.ActionListener() {
+        categoryNameBox.setLabelText("Product Category Name");
+        categoryNameBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                creatorNameBoxActionPerformed(evt);
+                categoryNameBoxActionPerformed(evt);
             }
         });
-
-        expenseBox.setLabelText("Expense");
-        expenseBox.setName(""); // NOI18N
-        expenseBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                expenseBoxActionPerformed(evt);
-            }
-        });
-        expenseBox.addKeyListener(new java.awt.event.KeyAdapter() {
+        categoryNameBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                expenseBoxKeyReleased(evt);
+                categoryNameBoxKeyReleased(evt);
             }
         });
 
@@ -128,8 +91,6 @@ public class CostAddFrame extends javax.swing.JFrame {
             }
         });
 
-        costCategoryChoose.setLabeText("Cost Category");
-
         okBtn.setBackground(new java.awt.Color(0, 255, 255));
         okBtn.setForeground(new java.awt.Color(0, 0, 0));
         okBtn.setText("Ok");
@@ -142,8 +103,8 @@ public class CostAddFrame extends javax.swing.JFrame {
             }
         });
 
-        alert.setForeground(new java.awt.Color(255, 0, 51));
-        alert.setText("Invalid Expense");
+        alertProCtg.setForeground(new java.awt.Color(255, 0, 51));
+        alertProCtg.setText("jLabel2");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,7 +113,6 @@ public class CostAddFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(costCategoryChoose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,30 +121,24 @@ public class CostAddFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(expenseBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(creatorNameBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(categoryNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(alert)
-                .addGap(146, 146, 146))
+                .addComponent(alertProCtg, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
+                .addGap(33, 33, 33)
+                .addComponent(categoryNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(creatorNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(costCategoryChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(expenseBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(alert)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
+                .addComponent(alertProCtg)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -194,13 +148,9 @@ public class CostAddFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void creatorNameBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creatorNameBoxActionPerformed
+    private void categoryNameBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryNameBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_creatorNameBoxActionPerformed
-
-    private void expenseBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expenseBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_expenseBoxActionPerformed
+    }//GEN-LAST:event_categoryNameBoxActionPerformed
 
     private void closeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeBtnMouseClicked
         this.dispose();
@@ -212,37 +162,40 @@ public class CostAddFrame extends javax.swing.JFrame {
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
         try {
-            int userIDCreated = this.user.getUserID();
-            int costCtgID = 0;
-            for (CostCategory i : costCategory) {
-                if (i.getCostCtgName().equals(costCategoryChoose.getSelectedItem())) {
-                    costCtgID = i.getCostCtgID();
-                    break;
-                }
-            }
-            new CostQuery(this.conn).insertCost(userIDCreated, costCtgID, Integer.valueOf(expenseBox.getText()));
+            new ProductCategoryQuery(conn).insertProductCategory(categoryNameBox.getText());
         } catch (SQLException ex) {
-            Logger.getLogger(CostAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         frame.dispose();
 
     }//GEN-LAST:event_okBtnMouseClicked
 
-    private void expenseBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_expenseBoxKeyReleased
-        if (!expenseBox.getText().matches("[0-9]+")) {
-            alert.setVisible(true);
-        } else {
-            alert.setVisible(false);
+    private void categoryNameBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_categoryNameBoxKeyReleased
+        try {
+            if (new ProductCategoryQuery(conn).selectProductCategoryByName(categoryNameBox.getText()).size() > 0) {
+                alertProCtg.setText(categoryNameBox.getText() + " is already exists");
+                alertProCtg.setVisible(true);
+                isInvalid = true;
+            } else {
+                alertProCtg.setVisible(false);
+                isInvalid = false;
+            }
+            if (isInvalid) {
+                closeBtn.setEnabled(false);
+            } else {
+                closeBtn.setEnabled(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_expenseBoxKeyReleased
+    }//GEN-LAST:event_categoryNameBoxKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel alert;
+    private javax.swing.JLabel alertProCtg;
+    private textfield.swing.TextField categoryNameBox;
     private swing.MyButton closeBtn;
-    private dashboard.components.combobox.Combobox costCategoryChoose;
-    private textfield.swing.TextField creatorNameBox;
-    private textfield.swing.TextField expenseBox;
     private javax.swing.JLabel jLabel1;
     private swing.MyButton okBtn;
     // End of variables declaration//GEN-END:variables

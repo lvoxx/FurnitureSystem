@@ -29,7 +29,6 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="costCategoryChoose" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       <Component id="closeBtn" min="-2" pref="117" max="-2" attributes="0"/>
@@ -39,21 +38,31 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="dateAddedBox" max="32767" attributes="0"/>
-                              <Component id="expenseBox" pref="378" max="32767" attributes="0"/>
+                              <Component id="priceBox" alignment="0" max="32767" attributes="0"/>
+                              <Component id="inStockQuantityBox" alignment="0" max="32767" attributes="0"/>
+                              <Component id="dateAddedBox" pref="378" max="32767" attributes="0"/>
                               <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="creatorNameBox" alignment="0" max="32767" attributes="0"/>
-                              <Component id="costIDBox" alignment="0" max="32767" attributes="0"/>
+                              <Component id="productNameBox" alignment="0" max="32767" attributes="0"/>
+                              <Component id="productIDBox" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
-                              <Component id="alertExpense" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="productCategoryChoose" alignment="0" min="-2" pref="378" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="41" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
+                      <Component id="alertISQ" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
+                      <Component id="alertPrice" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -63,18 +72,22 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="costIDBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Component id="creatorNameBox" min="-2" max="-2" attributes="0"/>
+              <Component id="productIDBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="costCategoryChoose" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-              <Component id="expenseBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="productNameBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="inStockQuantityBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Component id="priceBox" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="productCategoryChoose" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="dateAddedBox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="alertExpense" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="83" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="alertISQ" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="alertPrice" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="33" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="closeBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="okBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -90,37 +103,26 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="sansserif" size="32" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Edit Cost Info"/>
+        <Property name="text" type="java.lang.String" value="Edit Product Info"/>
       </Properties>
     </Component>
-    <Component class="textfield.swing.TextField" name="costIDBox">
+    <Component class="textfield.swing.TextField" name="productIDBox">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="CostID"/>
-        <Property name="labelText" type="java.lang.String" value="Cost ID"/>
+        <Property name="labelText" type="java.lang.String" value="Product ID"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="costIDBoxActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="productIDBoxActionPerformed"/>
       </Events>
     </Component>
-    <Component class="textfield.swing.TextField" name="creatorNameBox">
+    <Component class="textfield.swing.TextField" name="productNameBox">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" value="Contact"/>
-        <Property name="labelText" type="java.lang.String" value="Creator Name"/>
+        <Property name="labelText" type="java.lang.String" value="Product Name"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="creatorNameBoxActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="textfield.swing.TextField" name="expenseBox">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Date Added"/>
-        <Property name="labelText" type="java.lang.String" value="Expense"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="expenseBoxActionPerformed"/>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="expenseBoxKeyReleased"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="productNameBoxActionPerformed"/>
       </Events>
     </Component>
     <Component class="textfield.swing.TextField" name="dateAddedBox">
@@ -156,9 +158,9 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="closeBtnMouseClicked"/>
       </Events>
     </Component>
-    <Component class="dashboard.components.combobox.Combobox" name="costCategoryChoose">
+    <Component class="dashboard.components.combobox.Combobox" name="productCategoryChoose">
       <Properties>
-        <Property name="labeText" type="java.lang.String" value="Cost Category"/>
+        <Property name="labeText" type="java.lang.String" value="Product Category"/>
       </Properties>
     </Component>
     <Component class="swing.MyButton" name="okBtn">
@@ -184,12 +186,40 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="okBtnMouseClicked"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="alertExpense">
+    <Component class="textfield.swing.TextField" name="priceBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date Added"/>
+        <Property name="labelText" type="java.lang.String" value="Price"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="priceBoxActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="priceBoxKeyReleased"/>
+      </Events>
+    </Component>
+    <Component class="textfield.swing.TextField" name="inStockQuantityBox">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Date Added"/>
+        <Property name="labelText" type="java.lang.String" value="In Stock Quantity"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="inStockQuantityBoxActionPerformed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="inStockQuantityBoxKeyReleased"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="alertISQ">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="33" green="0" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Invalid Expense"/>
+        <Property name="text" type="java.lang.String" value="Invalid In Stock Quantity"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="alertPrice">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="33" green="0" red="ff" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Invalid Price"/>
       </Properties>
     </Component>
   </SubComponents>

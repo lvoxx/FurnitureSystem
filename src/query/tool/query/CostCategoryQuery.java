@@ -54,6 +54,21 @@ public class CostCategoryQuery {
         }
         return res;
     }
+    
+    public List<CostCategory> selectCostCategoryListByName(String name) throws SQLException {
+        List<CostCategory> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = conn.prepareStatement("SELECT * FROM tblCostCategory WHERE CostCtgName LIKE ?");
+            preSt.setString(1, "%" + name + "%");
+            ResultSet rs = preSt.executeQuery();
+            while(rs.next()){
+                res.add(new CostCategory(rs.getInt("CostCtgID"), rs.getString("CostCtgName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Cost Category List");
+        }
+        return res;
+    }
 
     public int insertCostCategory(String costCategoryName) throws SQLException {
         try {

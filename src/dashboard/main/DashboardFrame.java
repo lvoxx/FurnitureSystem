@@ -80,7 +80,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         costForm = new CostForm(frame, iSettings);
         //customerForm = new CustomerForm();
         staffForm = new StaffForm();
-        productForm = new ProductForm();
+        productForm = new ProductForm(frame);
         stockForm = new StockForm();
         shippingProviderForm = new ShippingProviderForm();
         materialSupplierForm = new MaterialSupplierForm();

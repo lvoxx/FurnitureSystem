@@ -45,10 +45,10 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="127" max="-2" attributes="0"/>
-              <Component id="alertCtg" min="-2" max="-2" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="alertProCtg" min="-2" pref="197" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -60,7 +60,7 @@
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Component id="categoryNameBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="alertCtg" min="-2" max="-2" attributes="0"/>
+              <Component id="alertProCtg" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="324" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="closeBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -77,12 +77,12 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="sansserif" size="32" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Add Cost Category Info"/>
+        <Property name="text" type="java.lang.String" value="Add Product Category "/>
       </Properties>
     </Component>
     <Component class="textfield.swing.TextField" name="categoryNameBox">
       <Properties>
-        <Property name="labelText" type="java.lang.String" value="Category Name"/>
+        <Property name="labelText" type="java.lang.String" value="Product Category Name"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="categoryNameBoxActionPerformed"/>
@@ -135,10 +135,10 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="okBtnMouseClicked"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="alertCtg">
+    <Component class="javax.swing.JLabel" name="alertProCtg">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
+          <Color blue="33" green="0" red="ff" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="jLabel2"/>
       </Properties>

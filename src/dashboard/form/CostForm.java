@@ -137,6 +137,7 @@ public class CostForm extends javax.swing.JPanel {
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
+        model.setRowCount(0);
         searchField.setText(null);
         //model.fireTableDataChanged();
         getCostDataFromDB();
@@ -165,7 +166,7 @@ public class CostForm extends javax.swing.JPanel {
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
-
+        model.setRowCount(0);
         //model.fireTableDataChanged();
         getCostDataBySearching(searchField.getText());
         loadData();

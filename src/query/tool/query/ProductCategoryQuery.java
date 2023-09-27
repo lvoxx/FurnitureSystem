@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ProductCategoryQuery {
+
     private final String SELECT = "SELECT * FROM tblProductCategory WHERE ProductCtgID = ?";
     private final String INSERT = "EXEC proc_InsertProductCategory @CategoryName = ?";
     private final String UPDATE = "EXEC proc_UpdateProductCategory @ProductCtgID = ?, @CategoryName = ?";
@@ -41,16 +41,17 @@ public class ProductCategoryQuery {
         }
     }
 
-    public int insertProductCategory(ProductCategory productCategory) throws SQLException {
+    public int insertProductCategory(String productCategoryName) throws SQLException {
         try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(INSERT);
-            preSt.setString(1, productCategory.getCategoryName());// Category Name
+            preSt.setString(1, productCategoryName);// Category Name
 
-            if (preSt.executeUpdate() == 1)
+            if (preSt.executeUpdate() == 1) {
                 return 1;
+            }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to insert the product category " + productCategory.toString());
+            throw new SQLException("Failed to insert the product category " + productCategoryName);
         }
         return -1;
     }
@@ -62,8 +63,9 @@ public class ProductCategoryQuery {
             preSt.setInt(1, productCategory.getProductCtgID());// ProductCtgID
             preSt.setString(2, productCategory.getCategoryName());// CategoryName
 
-            if (preSt.executeUpdate() == 1)
+            if (preSt.executeUpdate() == 1) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException("Failed to update the product category: " + productCategory.toString());
         }
@@ -74,12 +76,46 @@ public class ProductCategoryQuery {
         try {
             PreparedStatement preSt = this.conn.prepareStatement(DELETE);
             preSt.setInt(1, productCategory.getProductCtgID());// ProductCtgID
-            if (preSt.execute())
+            if (preSt.execute()) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException(
                     "Failed to delete the product category with id: " + productCategory.getProductCtgID());
         }
         return -1;
+    }
+
+    public List<ProductCategory> selectProductCategoryList() throws SQLException {
+        List<ProductCategory> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("SELECT * FROM tblProductCategory");
+            ResultSet rs = preSt.executeQuery();
+
+            while (rs.next()) {
+                res.add(new ProductCategory(rs.getInt("ProductCtgID"), rs.getString("CategoryName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get product category list");
+        }
+        return res;
+    }
+    
+    public List<ProductCategory> selectProductCategoryByName(String name) throws SQLException {
+        List<ProductCategory> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("SELECT * FROM tblProductCategory WHERE [CategoryName] = ?");
+            preSt.setString(1, name);
+            ResultSet rs = preSt.executeQuery();
+
+            while (rs.next()) {
+                res.add(new ProductCategory(rs.getInt("ProductCtgID"), rs.getString("CategoryName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get product category list");
+        }
+        return res;
     }
 }

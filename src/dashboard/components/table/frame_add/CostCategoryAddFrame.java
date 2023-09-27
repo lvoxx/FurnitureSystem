@@ -23,6 +23,7 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
     private JFrame frame;
     private Connection conn;
 
+    private boolean isInvalid = false;
 
     public CostCategoryAddFrame() {
         this.setUndecorated(true);
@@ -31,6 +32,8 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
         this.frame = this;
         getContentPane().setBackground(Color.white);
         setLocationRelativeTo(null);
+        closeBtn.setEnabled(false);
+        alertCtg.setVisible(false);
 
         try {
             this.conn = Settings.BuildConnect();
@@ -52,6 +55,7 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
         categoryNameBox = new textfield.swing.TextField();
         closeBtn = new swing.MyButton();
         okBtn = new swing.MyButton();
+        alertCtg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -67,6 +71,11 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
         categoryNameBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 categoryNameBoxActionPerformed(evt);
+            }
+        });
+        categoryNameBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                categoryNameBoxKeyReleased(evt);
             }
         });
 
@@ -94,6 +103,9 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
             }
         });
 
+        alertCtg.setForeground(new java.awt.Color(255, 0, 0));
+        alertCtg.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,6 +124,10 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
                             .addComponent(categoryNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(127, 127, 127)
+                .addComponent(alertCtg)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +136,9 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(33, 33, 33)
                 .addComponent(categoryNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 358, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(alertCtg)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -152,8 +170,30 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_okBtnMouseClicked
 
+    private void categoryNameBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_categoryNameBoxKeyReleased
+        try {
+            if (new CostCategoryQuery(conn).selectCostCategoryListByName(categoryNameBox.getText()).size() > 0) {
+                isInvalid = true;
+                alertCtg.setText(categoryNameBox.getText() + " is already exists");
+                alertCtg.setVisible(true);
+            } else {
+                isInvalid = false;
+                alertCtg.setVisible(false);
+            }
+            if(isInvalid){
+                closeBtn.setEnabled(false);
+            }else{
+                closeBtn.setEnabled(true);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CostCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_categoryNameBoxKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel alertCtg;
     private textfield.swing.TextField categoryNameBox;
     private swing.MyButton closeBtn;
     private javax.swing.JLabel jLabel1;
