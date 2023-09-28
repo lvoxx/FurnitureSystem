@@ -13,12 +13,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import java.sql.*;
 import query.connect.Settings;
-import query.tool.model.Cost;
 import query.tool.model.CostCategory;
 import query.tool.model.User;
 import query.tool.query.CostCategoryQuery;
 import query.tool.query.CostQuery;
-import query.tool.query.UserQuery;
 
 /**
  *
@@ -32,6 +30,7 @@ public class CostAddFrame extends javax.swing.JFrame {
 
     private User user;
     private List<CostCategory> costCategory;
+    private boolean isValid = false;
 
     public CostAddFrame(User user) {
         this.setUndecorated(true);
@@ -141,6 +140,11 @@ public class CostAddFrame extends javax.swing.JFrame {
                 okBtnMouseClicked(evt);
             }
         });
+        okBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okBtnActionPerformed(evt);
+            }
+        });
 
         alert.setForeground(new java.awt.Color(255, 0, 51));
         alert.setText("Invalid Expense");
@@ -211,7 +215,8 @@ public class CostAddFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-        try {
+        if(isValid){
+            try {
             int userIDCreated = this.user.getUserID();
             int costCtgID = 0;
             for (CostCategory i : costCategory) {
@@ -225,16 +230,21 @@ public class CostAddFrame extends javax.swing.JFrame {
             Logger.getLogger(CostAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         frame.dispose();
-
+        }
     }//GEN-LAST:event_okBtnMouseClicked
 
     private void expenseBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_expenseBoxKeyReleased
         if (!expenseBox.getText().matches("[0-9]+")) {
             alert.setVisible(true);
+            isValid = false;
         } else {
             alert.setVisible(false);
+            isValid = true;
         }
     }//GEN-LAST:event_expenseBoxKeyReleased
+
+    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+    }//GEN-LAST:event_okBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -79,7 +79,6 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Component id="connectAlertLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   </Group>
                   <Component id="connectBtn" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
               </Group>
@@ -163,7 +162,6 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/dashboard/icon/connect.png"/>
         </Property>
-        <Property name="label" type="java.lang.String" value=""/>
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="connectBtnMouseClicked"/>

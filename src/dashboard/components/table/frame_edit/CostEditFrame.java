@@ -31,6 +31,7 @@ public class CostEditFrame extends javax.swing.JFrame {
 
     private Object[] rowData;
     private List<CostCategory> costCategory;
+    private boolean isValid = false;
 
     public CostEditFrame(Object[] data) {
         this.setUndecorated(true);
@@ -170,6 +171,11 @@ public class CostEditFrame extends javax.swing.JFrame {
                 okBtnMouseClicked(evt);
             }
         });
+        okBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okBtnActionPerformed(evt);
+            }
+        });
 
         alertExpense.setForeground(new java.awt.Color(255, 0, 51));
         alertExpense.setText("Invalid Expense");
@@ -253,30 +259,38 @@ public class CostEditFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-        try {
-            int userIDCreated = new UserQuery(this.conn).selectUserByName(rowData[1].toString()).get(0).getUserID();
-            int costCtgID = 0;
-            for (CostCategory i : costCategory) {
-                if (i.getCostCtgName().equals(costCategoryChoose.getSelectedItem())) {
-                    costCtgID = i.getCostCtgID();
-                    break;
+        if (isValid) {
+            okBtn.setEnabled(true);
+            try {
+                int userIDCreated = new UserQuery(this.conn).selectUserByName(rowData[1].toString()).get(0).getUserID();
+                int costCtgID = 0;
+                for (CostCategory i : costCategory) {
+                    if (i.getCostCtgName().equals(costCategoryChoose.getSelectedItem())) {
+                        costCtgID = i.getCostCtgID();
+                        break;
+                    }
                 }
+                new CostQuery(this.conn).updateCost(new Cost(Integer.valueOf(rowData[0].toString()), userIDCreated, costCtgID, Integer.valueOf(expenseBox.getText()), Date.valueOf(rowData[4].toString())));
+            } catch (SQLException ex) {
+                Logger.getLogger(CostEditFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            new CostQuery(this.conn).updateCost(new Cost(Integer.valueOf(rowData[0].toString()), userIDCreated, costCtgID, Integer.valueOf(expenseBox.getText()), Date.valueOf(rowData[4].toString())));
-        } catch (SQLException ex) {
-            Logger.getLogger(CostEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+            frame.dispose();
         }
-
-        frame.dispose();
     }//GEN-LAST:event_okBtnMouseClicked
 
     private void expenseBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_expenseBoxKeyReleased
-        if (!expenseBox.getText().matches("[0-9]+"))
+        if (!expenseBox.getText().matches("[0-9]+")) {
             alertExpense.setVisible(true);
-        else{
+            isValid = false;
+        } else {
             alertExpense.setVisible(false);
+            isValid = true;
         }
     }//GEN-LAST:event_expenseBoxKeyReleased
+
+    private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
+
+    }//GEN-LAST:event_okBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

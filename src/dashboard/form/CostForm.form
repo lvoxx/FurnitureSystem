@@ -97,7 +97,7 @@
     </Component>
     <Component class="dialog.custom.ButtonCustom" name="addCustomerBtn1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Add New Customer"/>
+        <Property name="text" type="java.lang.String" value="Add New Cost"/>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="sansserif" size="12" style="1"/>
         </Property>

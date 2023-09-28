@@ -30,8 +30,6 @@ public class DashboardFrame extends javax.swing.JFrame {
     private DashboardHome home;
 
     private OrderForm orderForm;
-    private CostInvoiceForm costInvoiceForm;
-    private WarehouseForm warehouseForm;
     private CustomerForm customerForm;
     private CostForm costForm;
     private StaffForm staffForm;
@@ -75,8 +73,6 @@ public class DashboardFrame extends javax.swing.JFrame {
         //setBackground(new Color(0, 0, 0, 0));
         home = new DashboardHome();
         orderForm = new OrderForm();
-        costInvoiceForm = new CostInvoiceForm();
-        warehouseForm = new WarehouseForm();
         costForm = new CostForm(frame, iSettings);
         customerForm = new CustomerForm(frame);
         staffForm = new StaffForm();
@@ -109,39 +105,31 @@ public class DashboardFrame extends javax.swing.JFrame {
                         setForm(orderForm);                 //Order
                         break;
                     }
-                    case 2: {
-                        setForm(costInvoiceForm);                 //Cost Invoice
-                        break;
-                    }
-                    case 3: {
-                        setForm(warehouseForm);                 //Warehouse
-                        break;
-                    }
-                    case 6: {
+                    case 4: {
                         setForm(customerForm);                 //Customer
                         break;
                     }
-                    case 7: {
+                    case 5: {
                         setForm(costForm);                 //Cost
                         break;
                     }
-                    case 8: {
+                    case 6: {
                         setForm(staffForm);                 //Staff
                         break;
                     }
-                    case 9: {
+                    case 7: {
                         setForm(productForm);                 //Product
                         break;
                     }
-                    case 10: {
+                    case 8: {
                         setForm(stockForm);                 //Stock
                         break;
                     }
-                    case 11: {
+                    case 9: {
                         setForm(shippingProviderForm);                 //Shipping Provide
                         break;
                     }
-                    case 12: {
+                    case 10: {
                         setForm(materialSupplierForm);                 //Material Supplier
                         break;
                     }

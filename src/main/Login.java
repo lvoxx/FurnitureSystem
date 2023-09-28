@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import java.sql.*;
 import java.util.Arrays;
+import notifi.swing.Notification;
 import query.connect.Settings;
 import query.tool.GeneralQuery;
 import query.tool.model.User;
@@ -39,6 +40,11 @@ public class Login extends javax.swing.JPanel {
             this.conn = Settings.BuildConnect();
             if (conn == null) {
                 connectAlertLabel.setVisible(true);
+                Notification notif = new Notification(frame, Notification.Type.WARNING, Notification.Location.TOP_CENTER, "Lost connection to server");
+                notif.showNotification();
+            }else{
+                Notification notif = new Notification(frame, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, "Connect to server success");
+                notif.showNotification();
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -183,6 +189,7 @@ public class Login extends javax.swing.JPanel {
         UserQuery uQuery = new UserQuery(conn);
         try {
             if (this.conn == null) {
+                this.conn = Settings.BuildConnect();
                 Settings.TryGetConnection(frame, conn);
             }
             if (!query.isUserAuth(txtUser.getText(), txtPass.getText())) {

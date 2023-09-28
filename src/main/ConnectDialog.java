@@ -299,7 +299,7 @@ public class ConnectDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        // TODO add your handling code here:
+        tryGetConnection();
     }//GEN-LAST:event_connectButtonActionPerformed
 
     private void ipAddressFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ipAddressFocusGained

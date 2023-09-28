@@ -33,21 +33,21 @@ public class Menu extends javax.swing.JPanel {
         //GENERAL
         listMenu1.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));          //Index 0   (Usability)
         listMenu1.addItem(new Model_Menu("2", "Order", Model_Menu.MenuType.MENU));              //Index 1   (Usability)
-        listMenu1.addItem(new Model_Menu("3", "Cost Invoice", Model_Menu.MenuType.MENU));       //Index 2   (Usability)
-        listMenu1.addItem(new Model_Menu("4", "Warehouse", Model_Menu.MenuType.MENU));          //Index 3   (Usability)
-        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));                  //Index 4
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));                  //Index 2
 
         //MANAGE
-        listMenu1.addItem(new Model_Menu("", "Data Manage", Model_Menu.MenuType.TITLE));        //Index 5
-        listMenu1.addItem(new Model_Menu("5", "Customer", Model_Menu.MenuType.MENU));           //Index 6   (Usability)
-        listMenu1.addItem(new Model_Menu("6", "Cost", Model_Menu.MenuType.MENU));               //Index 7   (Usability)
-        listMenu1.addItem(new Model_Menu("7", "Staff", Model_Menu.MenuType.MENU));              //Index 8   (Usability)
-        listMenu1.addItem(new Model_Menu("8", "Product", Model_Menu.MenuType.MENU));            //Index 9   (Usability)
-        listMenu1.addItem(new Model_Menu("9", "Stock", Model_Menu.MenuType.MENU));              //Index 10  (Usability)
-        listMenu1.addItem(new Model_Menu("10", "Shipping Provider", Model_Menu.MenuType.MENU)); //Index 11  (Usability)
-        listMenu1.addItem(new Model_Menu("11", "Material Supplier", Model_Menu.MenuType.MENU)); //Index 12  (Usability)
+        listMenu1.addItem(new Model_Menu("", "Data Manage", Model_Menu.MenuType.TITLE));        //Index 3
+        listMenu1.addItem(new Model_Menu("5", "Customer", Model_Menu.MenuType.MENU));           //Index 4   (Usability)
+        listMenu1.addItem(new Model_Menu("6", "Cost", Model_Menu.MenuType.MENU));               //Index 5   (Usability)
+        listMenu1.addItem(new Model_Menu("7", "Staff", Model_Menu.MenuType.MENU));              //Index 6   (Usability)
+        listMenu1.addItem(new Model_Menu("8", "Product", Model_Menu.MenuType.MENU));            //Index 7   (Usability)
+        listMenu1.addItem(new Model_Menu("9", "Stock", Model_Menu.MenuType.MENU));              //Index 8   (Usability)
+        listMenu1.addItem(new Model_Menu("10", "Shipping Provider", Model_Menu.MenuType.MENU)); //Index 9   (Usability)
+        listMenu1.addItem(new Model_Menu("11", "Material Supplier", Model_Menu.MenuType.MENU)); //Index 10  (Usability)
 
         //LOG OUT
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 11
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 12
         listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 13
         listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 14
         listMenu1.addItem(new Model_Menu("12", "Logout", Model_Menu.MenuType.MENU));            //Index 15  (Usability)

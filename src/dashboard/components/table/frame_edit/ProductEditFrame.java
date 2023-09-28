@@ -30,6 +30,7 @@ public class ProductEditFrame extends javax.swing.JFrame {
 
     private Object[] rowData;
     private List<ProductCategory> productCategory;
+    private boolean isValid = false;
 
     public ProductEditFrame(Object[] data) {
         this.setUndecorated(true);

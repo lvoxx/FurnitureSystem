@@ -234,7 +234,7 @@ public class CostForm extends javax.swing.JPanel {
             }
         });
 
-        addCustomerBtn1.setText("Add New Customer");
+        addCustomerBtn1.setText("Add New Cost");
         addCustomerBtn1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         addCustomerBtn1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
