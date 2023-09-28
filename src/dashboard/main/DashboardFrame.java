@@ -72,7 +72,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
         //setBackground(new Color(0, 0, 0, 0));
         home = new DashboardHome();
-        orderForm = new OrderForm();
+        orderForm = new OrderForm(frame, iSettings);
         costForm = new CostForm(frame, iSettings);
         customerForm = new CustomerForm(frame);
         staffForm = new StaffForm();

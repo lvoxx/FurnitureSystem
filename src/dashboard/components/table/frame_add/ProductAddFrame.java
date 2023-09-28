@@ -29,6 +29,8 @@ public class ProductAddFrame extends javax.swing.JFrame {
     private ProductCategoryQuery query;
 
     private List<ProductCategory> productCategory;
+    private boolean isInStockQuantityValid = false;
+    private boolean isPriceValid = false;
 
     public ProductAddFrame() {
         this.setUndecorated(true);
@@ -228,21 +230,21 @@ public class ProductAddFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-
-        try {
-            int productCtgID = 0;
-            for (ProductCategory i : productCategory) {
-                if (i.getCategoryName().equals(productCategoryChoose.getSelectedItem())) {
-                    productCtgID = i.getProductCtgID();
-                    break;
+        if (isInStockQuantityValid && isPriceValid) {
+            try {
+                int productCtgID = 0;
+                for (ProductCategory i : productCategory) {
+                    if (i.getCategoryName().equals(productCategoryChoose.getSelectedItem())) {
+                        productCtgID = i.getProductCtgID();
+                        break;
+                    }
                 }
+                new ProductQuery(this.conn).insertProduct(productNameBox.getText(), Integer.valueOf(inStockQuantityBox.getText()), Integer.valueOf(priceBox.getText()), productCtgID);
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductAddFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            new ProductQuery(this.conn).insertProduct(productNameBox.getText(), Integer.valueOf(inStockQuantityBox.getText()), Integer.valueOf(priceBox.getText()), productCtgID);
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+            frame.dispose();
         }
-
-        frame.dispose();
     }//GEN-LAST:event_okBtnMouseClicked
 
     private void priceBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceBoxActionPerformed
@@ -256,16 +258,20 @@ public class ProductAddFrame extends javax.swing.JFrame {
     private void inStockQuantityBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inStockQuantityBoxKeyReleased
         if (!inStockQuantityBox.getText().matches("[0-9]+")) {
             alertISQ.setVisible(true);
+            isInStockQuantityValid = false;
         } else {
             alertISQ.setVisible(false);
+            isInStockQuantityValid = true;
         }
     }//GEN-LAST:event_inStockQuantityBoxKeyReleased
 
     private void priceBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceBoxKeyReleased
         if (!priceBox.getText().matches("[0-9]+")) {
             alertPrice.setVisible(true);
-        }else{
+            isPriceValid = false;
+        } else {
             alertPrice.setVisible(false);
+            isPriceValid = true;
         }
     }//GEN-LAST:event_priceBoxKeyReleased
 

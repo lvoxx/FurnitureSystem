@@ -30,7 +30,8 @@ public class ProductEditFrame extends javax.swing.JFrame {
 
     private Object[] rowData;
     private List<ProductCategory> productCategory;
-    private boolean isValid = false;
+    private boolean isInStockQuantityValid = false;
+    private boolean isPriceValid = false;
 
     public ProductEditFrame(Object[] data) {
         this.setUndecorated(true);
@@ -41,7 +42,7 @@ public class ProductEditFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         alertISQ.setVisible(false);
         alertPrice.setVisible(false);
-        
+
         try {
             this.conn = Settings.BuildConnect();
         } catch (SQLException ex) {
@@ -278,21 +279,21 @@ public class ProductEditFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-     
-        try {
-            int productCtgID = 0;
-            for (ProductCategory i : productCategory) {
-                if (i.getCategoryName().equals(productCategoryChoose.getSelectedItem())) {
-                    productCtgID = i.getProductCtgID();
-                    break;
+        if (isInStockQuantityValid && isPriceValid) {
+            try {
+                int productCtgID = 0;
+                for (ProductCategory i : productCategory) {
+                    if (i.getCategoryName().equals(productCategoryChoose.getSelectedItem())) {
+                        productCtgID = i.getProductCtgID();
+                        break;
+                    }
                 }
+                new ProductQuery(this.conn).updateProduct(new Product(Integer.valueOf(productIDBox.getText()), productNameBox.getText(), Integer.valueOf(inStockQuantityBox.getText()), Integer.valueOf(priceBox.getText()), productCtgID, Date.valueOf(rowData[5].toString())));
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductEditFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            new ProductQuery(this.conn).updateProduct(new Product(Integer.valueOf(productIDBox.getText()), productNameBox.getText(), Integer.valueOf(inStockQuantityBox.getText()), Integer.valueOf(priceBox.getText()), productCtgID, Date.valueOf(rowData[5].toString())));
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+            frame.dispose();
         }
-
-        frame.dispose();
     }//GEN-LAST:event_okBtnMouseClicked
 
     private void priceBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceBoxActionPerformed
@@ -306,16 +307,20 @@ public class ProductEditFrame extends javax.swing.JFrame {
     private void inStockQuantityBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inStockQuantityBoxKeyReleased
         if (!inStockQuantityBox.getText().matches("[0-9]+")) {
             alertISQ.setVisible(true);
-        }else{
+            isInStockQuantityValid = false;
+        } else {
             alertISQ.setVisible(false);
+            isInStockQuantityValid = true;
         }
     }//GEN-LAST:event_inStockQuantityBoxKeyReleased
 
     private void priceBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_priceBoxKeyReleased
         if (!priceBox.getText().matches("[0-9]+")) {
             alertPrice.setVisible(true);
-        }else{
+            isPriceValid = false;
+        } else {
             alertPrice.setVisible(false);
+            isPriceValid= true;
         }
     }//GEN-LAST:event_priceBoxKeyReleased
 
