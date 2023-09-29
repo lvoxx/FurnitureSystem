@@ -4,14 +4,18 @@
  */
 package dashboard.components.tabledrawer;
 
+import dashboard.components.table.controllers.IAlert;
 import dashboard.components.table.controllers.IData;
-import dashboard.components.table.swing.TableActionCellEditor;
-import dashboard.components.table.swing.TableActionCellRender;
+import dashboard.components.table.swing.TableActionCellEditor_Delete;
+import dashboard.components.table.swing.TableActionCellRender_Delete;
 import dashboard.components.table.swing.TableActionEvent;
 import dialog.message.MessageDialog;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -27,7 +31,8 @@ import query.tool.query.OrderQuery;
 public class TableUnpaidOrderDetails extends javax.swing.JPanel {
 
     private IData data;
-    private final int ACTION_COLL = 4;
+    private IAlert alert;
+    private final int ACTION_COLL = 5;
     private JFrame frame;
 
     public TableUnpaidOrderDetails() {
@@ -48,6 +53,10 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
         this.frame = frame;
     }
 
+    public void setAlert(IAlert alert) {
+        this.alert = alert;
+    }
+
     // ------------------------------------------------------------------------------------
     // EDIT HERE
     private void addRowEvent() {
@@ -59,44 +68,80 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
 
             @Override
             public void onDelete(int row) {
-                try {
-                    Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
-                    MessageDialog dialog = new MessageDialog(frame);
-                    dialog.showMessage("Delete product: " + rowData[1].toString(), "Deleted this product in the order cannot be recovered");
-                    if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
-                        //Delete row on SQL server
-                        OrderQuery query = new OrderQuery(Settings.BuildConnect());
-                        query.deleteOrder(Integer.valueOf(rowData[0].toString()));
-                        //Refresh table in client
-                        data.refreshData();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(TableUnpaidOrderDetails.class.getName()).log(Level.SEVERE, null, ex);
+                Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
+                MessageDialog dialog = new MessageDialog(frame);
+                dialog.showMessage("Delete product: " + rowData[1].toString(), "Deleted this product in the order cannot be recovered");
+                if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+                    model.removeRow(row);
                 }
+                alert.setNewTotal(String.valueOf(getNewPrice(row, 0)) + " $");
+
             }
 
             @Override
             public void onView(int row) {
             }
         };
-        table.getColumnModel().getColumn(ACTION_COLL).setCellRenderer(new TableActionCellRender());
-        table.getColumnModel().getColumn(ACTION_COLL).setCellEditor(new TableActionCellEditor(event));
+        table.getColumnModel().getColumn(ACTION_COLL).setCellRenderer(new TableActionCellRender_Delete());
+        table.getColumnModel().getColumn(ACTION_COLL).setCellEditor(new TableActionCellEditor_Delete(event));
         //COLLUMN EDITTOR END
 
         //COLLUM EFFECT START
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        for (int i = 0; i < 4; ++i) {
-            table.getColumnModel().getColumn(i).setCellRenderer(rightRenderer);
-        }
-        table.getColumnModel().getColumn(0).setPreferredWidth(20);
-        table.getColumnModel().getColumn(1).setPreferredWidth(50);
-        table.getColumnModel().getColumn(2).setPreferredWidth(20);
-        table.getColumnModel().getColumn(3).setPreferredWidth(20);
-        table.getColumnModel().getColumn(4).setPreferredWidth(30);
-        table.getColumnModel().getColumn(5).setPreferredWidth(40);
-
         //COLLUMN EFFECT END
+
+        //SET QUANTITY LISTENER
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TableCellListener tcl = (TableCellListener) e.getSource();
+                int collumn = tcl.getColumn();
+                int row = tcl.getRow();
+                //[1-9]\\d*
+                String newValue = String.valueOf(tcl.getNewValue());
+                //Quantity
+                if (collumn == 2) {
+                    if (newValue.matches("[1-9]\\d*")) {
+                        int newQuantity = Integer.valueOf(newValue);
+                        int newSubtotal = newQuantity * (int) table.getModel().getValueAt(row, collumn + 1);
+                        table.getModel().setValueAt(newSubtotal, row, 4);
+                        alert.alertQuantityOn(false);
+                        alert.setNewTotal(String.valueOf(getNewPrice(row, newSubtotal)) + " $");
+                    } else {
+                        alert.alertQuantityOn(true);
+                    }
+                } else {
+                    //FixedPrice
+                    if (newValue.matches("0|[1-9]\\d*")) {
+                        int newQuantity = Integer.valueOf(newValue);
+                        int newSubtotal = newQuantity * (int) table.getModel().getValueAt(row, collumn - 1);
+                        table.getModel().setValueAt(newSubtotal, row, 4);
+                        alert.alertFixedPriceOn(false);
+                        alert.setNewTotal(String.valueOf(getNewPrice(row, newSubtotal)) + " $");
+                    } else {
+                        alert.alertFixedPriceOn(true);
+                    }
+                }
+
+            }
+        };
+
+        TableCellListener tclFixedPrice = new TableCellListener(table, action);
+    }
+
+    private int getNewPrice(int newRow, int newSubtotal) {
+        int rows = table.getModel().getRowCount();
+        int total = 0;
+        for (int i = 0; i < rows; ++i) {
+            if (i == newRow) {
+                total += newSubtotal;
+            }
+            total += Integer.valueOf(table.getModel().getValueAt(i, 2).toString()) * Integer.valueOf(table.getModel().getValueAt(i, 3).toString());
+        }
+
+        return total;
     }
 
     private Object[] getRowAt(int row, DefaultTableModel model) {
@@ -124,14 +169,14 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Product Name", "Quantity", "Fixed Price", "Action"
+                "ID", "Product Name", "Quantity", "Fixed Price", "Subtotal", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, true
+                false, false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -155,9 +200,7 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 546, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -40,19 +40,19 @@ public class OrderDetailsQuery {
         return res;
     }
 
-    public int insertOrderDetails(OrderDetails orderDetails) throws SQLException {
+    public int insertOrderDetails(int orderID, int productID, int quantity) throws SQLException {
         try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(INSERT);
-            preSt.setInt(1, orderDetails.getOrderID());// OrderID
-            preSt.setInt(2, orderDetails.getProductID());// ProductID
-            preSt.setInt(3, orderDetails.getQuantity());// Quantity
+            preSt.setInt(1, orderID);// OrderID
+            preSt.setInt(2, productID);// ProductID
+            preSt.setInt(3, quantity);// Quantity
 
             if (preSt.executeUpdate() == 1) {
                 return 1;
             }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to insert the order details " + orderDetails.toString());
+            throw new SQLException("Failed to insert the order details");
         }
         return -1;
     }

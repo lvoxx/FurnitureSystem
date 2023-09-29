@@ -187,12 +187,6 @@ public class CostForm extends javax.swing.JPanel {
         this.costs = queryC.selectMCostListSearch(searchName);
     }
 
-    private void toLoginForm() {
-        //System.out.print(1);
-        new Main().setVisible(true);
-        frame.dispose();
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -45,6 +45,24 @@ public class ProductQuery {
         }
     }
 
+    public List<String> selectAllProductName() throws SQLException {
+        List<String> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("SELECT * FROM tblProduct");
+            ResultSet rs = preSt.executeQuery();
+            rs = preSt.executeQuery();
+            while (rs.next()) {
+                res.add(rs.getString("ProductName"));
+            }
+
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get product name list");
+        }
+        
+        return res;
+    }
+
     public List<MProduct> selectMProductList() throws SQLException {
         List<MProduct> res = new ArrayList<>();
         try {
