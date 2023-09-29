@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ShippingProviderQuery {
 
-    private final String SELECT = "SELECT * FROM tblShippingProvider WHERE ShippingID = ?";
+    private final String SELECT = "SELECT * FROM tblShippingProvider";
     private final String INSERT = "EXEC proc_InsertProduct @ShippingName = ?, @PriceID = ?, @Address = ?, @ContactNo = ?";
     private final String UPDATE = "EXEC proc_UpdateProduct @ShippingID = ?, @ShippingName = ?, @PriceID = ?, @Address = ?, @ContactNo = ?";
     private final String DELETE = "EXEC proc_DeleteProduct @ShippingID = ?";
@@ -20,27 +20,23 @@ public class ShippingProviderQuery {
         this.conn = conn;
     }
 
-    public List<ShippingProvider> selectShippingProvider(List<Integer> shippingProviderIDs) throws SQLException {
+    public List<ShippingProvider> selectShippingProvider() throws SQLException {
+        List<ShippingProvider> res = new ArrayList<>();
         try {
-            List<ShippingProvider> res = new ArrayList<>();
-            PreparedStatement preSt;
-            ResultSet rs;
-            for (int i = 0; i < shippingProviderIDs.size(); ++i) {
-                preSt = this.conn
-                        .prepareStatement(SELECT);
-                preSt.setInt(1, shippingProviderIDs.get(i));
-                rs = preSt.executeQuery();
-                if (rs.next()) {
-                    res.add(new ShippingProvider(rs.getInt("ShippingID"), rs.getString("ShippingName"),
-                            rs.getInt("PriceID"), rs.getString("Address"),
-                            rs.getString("ContactNo"), rs.getDate("DateAdded")));
-                }
+            PreparedStatement preSt = this.conn
+                    .prepareStatement(SELECT);
+            ResultSet rs = preSt.executeQuery();
+
+            while (rs.next()) {
+                res.add(new ShippingProvider(rs.getInt("ShippingID"), rs.getString("ShippingName"),
+                        rs.getInt("PriceID"), rs.getString("Address"),
+                        rs.getString("ContactNo"), rs.getDate("DateAdded")));
             }
 
-            return res;
         } catch (SQLException ex) {
-            throw new SQLException("Failed to get shipping provider: " + shippingProviderIDs.toString());
+            throw new SQLException("Failed to get shipping provider list");
         }
+        return res;
     }
 
     public ShippingProvider selectShippingProviderByName(String name) throws SQLException {

@@ -5,14 +5,10 @@
 package dashboard.components.tabledrawer;
 
 import dashboard.components.table.controllers.IData;
-import dashboard.components.table.frame_edit.UnPaidOrderEditFrame;
-import dashboard.components.table.frame_view.UnPaidOrderViewFrame;
 import dashboard.components.table.swing.TableActionCellEditor;
 import dashboard.components.table.swing.TableActionCellRender;
 import dashboard.components.table.swing.TableActionEvent;
 import dialog.message.MessageDialog;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,13 +24,13 @@ import query.tool.query.OrderQuery;
  *
  * @author Admin
  */
-public class TableUnpaidOrder extends javax.swing.JPanel {
+public class TableUnpaidOrderDetails extends javax.swing.JPanel {
 
     private IData data;
-    private final int ACTION_COLL = 6;
+    private final int ACTION_COLL = 4;
     private JFrame frame;
 
-    public TableUnpaidOrder() {
+    public TableUnpaidOrderDetails() {
         initComponents();
         addRowEvent();
     }
@@ -59,62 +55,14 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
         TableActionEvent event = new TableActionEvent() {
             @Override
             public void onEdit(int row) {
-                Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
-
-                //Init new JFrame to fill data
-                UnPaidOrderEditFrame orderFrame = new UnPaidOrderEditFrame(rowData);
-                orderFrame.addWindowListener(new WindowListener() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-
-                    }
-
-                    @Override
-                    public void windowDeactivated(WindowEvent e) {
-
-                    }
-
-                    @Override
-                    public void windowOpened(WindowEvent e) {
-
-                    }
-
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        data.refreshData();
-                    }
-
-                    @Override
-                    public void windowIconified(WindowEvent e) {
-
-                    }
-
-                    @Override
-                    public void windowDeiconified(WindowEvent e) {
-
-                    }
-
-                    @Override
-                    public void windowActivated(WindowEvent e) {
-
-                    }
-
-                });
-                orderFrame.show();
-
             }
 
             @Override
             public void onDelete(int row) {
                 try {
-//                    if (table.isEditing()) {
-//                        table.getCellEditor().stopCellEditing();
-//                    }
-//                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-//                    model.removeRow(row);
                     Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
                     MessageDialog dialog = new MessageDialog(frame);
-                    dialog.showMessage("Delete order id: " + rowData[0].toString(), "Deleted data cannot be recovered");
+                    dialog.showMessage("Delete product: " + rowData[1].toString(), "Deleted this product in the order cannot be recovered");
                     if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
                         //Delete row on SQL server
                         OrderQuery query = new OrderQuery(Settings.BuildConnect());
@@ -123,18 +71,12 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
                         data.refreshData();
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(TableUnpaidOrder.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TableUnpaidOrderDetails.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
             @Override
             public void onView(int row) {
-                //Get CustomerID by row index
-
-                Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
-
-                //Init new JFrame to fill data
-                new UnPaidOrderViewFrame(rowData).show();
             }
         };
         table.getColumnModel().getColumn(ACTION_COLL).setCellRenderer(new TableActionCellRender());
@@ -144,7 +86,7 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
         //COLLUM EFFECT START
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        for (int i = 0; i < 6; ++i) {
+        for (int i = 0; i < 4; ++i) {
             table.getColumnModel().getColumn(i).setCellRenderer(rightRenderer);
         }
         table.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -182,14 +124,14 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Customer Name", "Shipping Name", "Status", "Date Order", "User Created", "Action"
+                "ID", "Product Name", "Quantity", "Fixed Price", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
+                false, false, true, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -209,7 +151,7 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

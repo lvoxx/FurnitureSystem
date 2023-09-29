@@ -197,15 +197,15 @@ public class OrderQuery {
         return -1;
     }
 
-    public int deleteOrderDetails(Order order) throws SQLException {
+    public int deleteOrder(int orderID) throws SQLException {
         try {
             PreparedStatement preSt = this.conn.prepareStatement(DELETE);
-            preSt.setInt(1, order.getOrderID());// OrderID
+            preSt.setInt(1, orderID);// OrderID
             if (preSt.execute()) {
                 return 1;
             }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to delete the order with id: " + order.getOrderID());
+            throw new SQLException("Failed to delete the order with id: " + orderID);
         }
         return -1;
     }
