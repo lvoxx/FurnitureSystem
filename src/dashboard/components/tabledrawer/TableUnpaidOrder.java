@@ -28,13 +28,13 @@ import query.tool.query.ProductQuery;
  *
  * @author Admin
  */
-public class TableOrder extends javax.swing.JPanel {
+public class TableUnpaidOrder extends javax.swing.JPanel {
 
     private IData data;
-    private final int ACTION_COLL = 7;
+    private final int ACTION_COLL = 6;
     private JFrame frame;
 
-    public TableOrder() {
+    public TableUnpaidOrder() {
         initComponents();
         addRowEvent();
     }
@@ -124,7 +124,7 @@ public class TableOrder extends javax.swing.JPanel {
                         data.refreshData();
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(TableOrder.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TableUnpaidOrder.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -183,14 +183,14 @@ public class TableOrder extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Customer Name", "Shipping Name", "Status", "Date Order", "Date Paid", "User Created", "Action"
+                "ID", "Customer Name", "Shipping Name", "Status", "Date Order", "User Created", "Action"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {

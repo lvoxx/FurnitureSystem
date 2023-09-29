@@ -9,7 +9,6 @@ import dashboard.components.model.*;
 import dashboard.components.table.controllers.IData;
 import dashboard.components.table.controllers.ISettings;
 import dashboard.components.table.frame_add.CostAddFrame;
-import dashboard.components.table.frame_add.CostCategoryAddFrame;
 import dashboard.components.textfield.EventCallBack;
 import dashboard.components.textfield.EventTextField;
 import java.awt.event.WindowEvent;
@@ -29,8 +28,8 @@ public class OrderForm extends javax.swing.JPanel {
 
     private JFrame frame;
     private Connection conn;
-    private CostQuery queryC;
-    private List<MCost> costs;
+    private OrderQuery queryO;
+    private List<MOrder> orders;
     private IData data;
     private ISettings settings;
 
@@ -40,7 +39,7 @@ public class OrderForm extends javax.swing.JPanel {
         initComponents();
         //Get Cust Data From Database
         try {
-            getCostDataFromDB();
+            getUnpaidOrderDataFromDB();
         } catch (SQLException ex) {
             Logger.getLogger(OrderForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -119,13 +118,15 @@ public class OrderForm extends javax.swing.JPanel {
 
     private void loadData() {
         DefaultTableModel model = (DefaultTableModel) table.getTable().getModel();
-        costs.stream().forEach((item) -> {
+        orders.stream().forEach((item) -> {
             //Load Data by Query
-            String userIDCreated = item.getUserNameCreated();
-            Cost cost = item.getCost();
-            CostCategory costCategory = item.getCostCategory();
-
-            model.addRow(new Object[]{cost.getCostID(), userIDCreated, costCategory.getCostCtgName(), cost.getExpense(), cost.getDateCreated()});
+            String userName = item.getUserName();
+            String cusName = item.getCustomer();
+            String shippName = item.getShippingProvider();
+            Order order = item.getOrder();
+            
+            //ID - CUSTOMER NAME - SHIPPING NAME - STATUS - DATE ORDER - USER CREATED
+            model.addRow(new Object[]{order.getOrderID(), cusName, shippName, order.getStatus(), order.getDateOrder(), userName});
         });
         model.fireTableDataChanged();
 
@@ -140,24 +141,24 @@ public class OrderForm extends javax.swing.JPanel {
         model.setRowCount(0);
         searchField.setText(null);
         //model.fireTableDataChanged();
-        getCostDataFromDB();
+        getUnpaidOrderDataFromDB();
         loadData();
 
     }
 
-    private void getCostDataFromDB() throws SQLException {
+    private void getUnpaidOrderDataFromDB() throws SQLException {
         //Load All Data from server
         try {
             this.conn = Settings.BuildConnect();
             if (this.conn == null) {
                 Settings.TryGetConnection(frame, conn);
             } else {
-                this.queryC = new CostQuery(conn);
+                this.queryO = new OrderQuery(conn);
             }
         } catch (SQLException ex) {
             //toLoginForm();
         }
-        this.costs = queryC.selectMCostList();
+        this.orders = queryO.selectOrderUnPaid();
     }
 
     private void reloadDataFromSearch() throws SQLException {
@@ -168,23 +169,23 @@ public class OrderForm extends javax.swing.JPanel {
         }
         model.setRowCount(0);
         //model.fireTableDataChanged();
-        getCostDataBySearching(searchField.getText());
+        getOrderDataBySearching(searchField.getText());
         loadData();
     }
 
-    private void getCostDataBySearching(String searchName) throws SQLException {
+    private void getOrderDataBySearching(String searchName) throws SQLException {
         //Load All Data from server
         try {
             this.conn = Settings.BuildConnect();
             if (this.conn == null) {
                 Settings.TryGetConnection(frame, conn);
             } else {
-                this.queryC = new CostQuery(conn);
+                this.queryO = new OrderQuery(conn);
             }
         } catch (SQLException ex) {
             //toLoginForm();
         }
-        this.costs = queryC.selectMCostListSearch(searchName);
+        this.orders = queryO.selectOrderUnPaidSearch(searchName);
     }
 
     private void toLoginForm() {
@@ -205,7 +206,7 @@ public class OrderForm extends javax.swing.JPanel {
         searchField = new dashboard.components.textfield.TextFieldAnimation();
         clearButton1 = new dashboard.components.table.swing.ClearButton();
         addCustomerBtn1 = new dialog.custom.ButtonCustom();
-        table = new dashboard.components.tabledrawer.TableOrder();
+        table = new dashboard.components.tabledrawer.TableUnpaidOrder();
 
         setBackground(new java.awt.Color(242, 242, 242));
 
@@ -331,6 +332,6 @@ public class OrderForm extends javax.swing.JPanel {
     private dialog.custom.ButtonCustom addCustomerBtn1;
     private dashboard.components.table.swing.ClearButton clearButton1;
     private dashboard.components.textfield.TextFieldAnimation searchField;
-    private dashboard.components.tabledrawer.TableOrder table;
+    private dashboard.components.tabledrawer.TableUnpaidOrder table;
     // End of variables declaration//GEN-END:variables
 }

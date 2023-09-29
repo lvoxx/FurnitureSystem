@@ -1,5 +1,6 @@
 package query.tool.query;
 
+import dashboard.components.model.MOrder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,11 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import query.tool.model.Order;
-import query.tool.model.OrderDetails;
 
 public class OrderQuery {
+
     private final String SELECT = "SELECT * FROM tblOrder  WHERE [OrderID] = ?";
-    private final String SUB_SELECT = "SELECT * FROM tblOrderDetails  WHERE [OrderID] = ?";
 
     private final String INSERT = "EXEC proc_InsertOrder @CustomerID = ?, @ShippingID = ?, @UserIDCreated = ?";
     private final String UPDATE = "EXEC proc_UpdateOrder @OrderID = ?, @ShippingID = ?, @Status = ?";
@@ -23,55 +23,148 @@ public class OrderQuery {
         this.conn = conn;
     }
 
-    public List<Order> selectOrder(List<Integer> orderIDs) throws SQLException {
+    public List<Order> selectOrder(int orderID) throws SQLException {
+        List<Order> res = new ArrayList<>();
         try {
-            List<Order> res = new ArrayList<>();
-            List<OrderDetails> subRes;
-
-            PreparedStatement preSt, subPreSt;
-            ResultSet rs, subRs;
-
-            for (int i = 0; i < orderIDs.size(); ++i) {
-                subRes = new ArrayList<>();
-                subPreSt = this.conn.prepareStatement(SUB_SELECT);
-                subPreSt.setInt(1, orderIDs.get(i));
-                subRs = subPreSt.executeQuery();
-                // Get List of Cost Invoice Details by ID
-                while (subRs.next()) {
-                    subRes.add(
-                            new OrderDetails(subRs.getInt("OrderID"), subRs.getInt("ProductID"),
-                                    subRs.getInt("Quantity"),
-                                    subRs.getInt("FixedPrice")));
-                }
-                // Get Cost Invoice
-                preSt = this.conn.prepareStatement(SELECT);
-                preSt.setInt(1, orderIDs.get(i));
-                rs = preSt.executeQuery();
-                if (rs.next()) {
-                    res.add(new Order(rs.getInt("OrderID"), rs.getInt("CustomerID"), rs.getInt("ShippingID"),
-                            rs.getString("Status"),
-                            rs.getDate("DateOrder"), rs.getDate("DatePaid"), subRes, rs.getInt("UserIDCreated")));
-                }
+            PreparedStatement preSt = this.conn.prepareStatement(SELECT);
+            preSt.setInt(1, orderID);
+            ResultSet rs = preSt.executeQuery();
+            // Get Order
+            if (rs.next()) {
+                res.add(new Order(rs.getInt("OrderID"), rs.getInt("CustomerID"), rs.getInt("ShippingID"),
+                        rs.getString("Status"),
+                        rs.getDate("DateOrder"), rs.getDate("DatePaid"), rs.getInt("UserIDCreated")));
             }
 
-            return res;
         } catch (SQLException ex) {
-            throw new SQLException("Failed to get Order ID: " + orderIDs.toString());
+            throw new SQLException("Failed to get Order ID: " + orderID);
         }
+        return res;
     }
 
-    public int insertOrder(Order order) throws SQLException {
+    public List<MOrder> selectOrderUnPaid() throws SQLException {
+        List<MOrder> res = new ArrayList<>();
         try {
-            boolean isInsertOrder = false, isInsertOrderDetails = false;
-            int orderID = -1;
+            PreparedStatement preSt = this.conn.prepareStatement("SELECT O.[OrderID], O.[CustomerID], C.[Name] AS [CustomerName], O.ShippingID, S.[ShippingName], [Status], [DateOrder], [DatePaid], O.UserIDCreated, U.[Name] AS [UserName] FROM tblOrder AS O INNER JOIN tblCustomer AS C ON O.CustomerID = C.CustomerID INNER JOIN tblShippingProvider AS S ON O.ShippingID = S.ShippingID INNER JOIN tblUser AS U ON O.UserIDCreated = U.UserID WHERE [Status] = 'UnPaid'");
+            ResultSet rs = preSt.executeQuery();
+
+            // Get Order Unpaid
+            rs = preSt.executeQuery();
+            while (rs.next()) {
+                res.add(new MOrder(
+                        new Order(rs.getInt("OrderID"),
+                                rs.getInt("CustomerID"),
+                                rs.getInt("ShippingID"),
+                                rs.getString("Status"),
+                                rs.getDate("DateOrder"),
+                                rs.getDate("DatePaid"),
+                                rs.getInt("UserIDCreated")),
+                        rs.getString("CustomerName"),
+                        rs.getString("ShippingName"),
+                        rs.getString("UserName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Unpaid Order");
+        }
+        return res;
+    }
+    
+    public List<MOrder> selectOrderPaid() throws SQLException {
+        List<MOrder> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn.prepareStatement("SELECT O.[OrderID], O.[CustomerID], C.[Name] AS [CustomerName], O.ShippingID, S.[ShippingName], [Status], [DateOrder], [DatePaid], O.UserIDCreated, U.[Name] AS [UserName] FROM tblOrder AS O INNER JOIN tblCustomer AS C ON O.CustomerID = C.CustomerID INNER JOIN tblShippingProvider AS S ON O.ShippingID = S.ShippingID INNER JOIN tblUser AS U ON O.UserIDCreated = U.UserID WHERE [Status] = 'Paid'");
+            ResultSet rs = preSt.executeQuery();
+
+            // Get Order Unpaid
+            rs = preSt.executeQuery();
+            while (rs.next()) {
+                res.add(new MOrder(
+                        new Order(rs.getInt("OrderID"),
+                                rs.getInt("CustomerID"),
+                                rs.getInt("ShippingID"),
+                                rs.getString("Status"),
+                                rs.getDate("DateOrder"),
+                                rs.getDate("DatePaid"),
+                                rs.getInt("UserIDCreated")),
+                        rs.getString("CustomerName"),
+                        rs.getString("ShippingName"),
+                        rs.getString("UserName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Unpaid Order");
+        }
+        return res;
+    }
+    
+    public List<MOrder> selectOrderUnPaidSearch(String name) throws SQLException {
+        List<MOrder> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn.prepareStatement("SELECT O.[OrderID], O.[CustomerID], C.[Name] AS [CustomerName], O.ShippingID, S.[ShippingName], [Status], [DateOrder], [DatePaid], O.UserIDCreated, U.[Name] AS [UserName] FROM tblOrder AS O INNER JOIN tblCustomer AS C ON O.CustomerID = C.CustomerID INNER JOIN tblShippingProvider AS S ON O.ShippingID = S.ShippingID INNER JOIN tblUser AS U ON O.UserIDCreated = U.UserID WHERE [Status] = 'UnPaid' AND (C.[Name] LIKE ? OR S.ShippingName LIKE ? OR U.Username LIKE ?)");
+            preSt.setString(1, "%" + name + "%");
+            preSt.setString(2, "%" + name + "%");
+            preSt.setString(3, "%" + name + "%");
+            ResultSet rs = preSt.executeQuery();
+
+            // Get Order Unpaid
+            rs = preSt.executeQuery();
+            while (rs.next()) {
+                res.add(new MOrder(
+                        new Order(rs.getInt("OrderID"),
+                                rs.getInt("CustomerID"),
+                                rs.getInt("ShippingID"),
+                                rs.getString("Status"),
+                                rs.getDate("DateOrder"),
+                                rs.getDate("DatePaid"),
+                                rs.getInt("UserIDCreated")),
+                        rs.getString("CustomerName"),
+                        rs.getString("ShippingName"),
+                        rs.getString("UserName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Unpaid Order");
+        }
+        return res;
+    }
+    
+    public List<MOrder> selectOrderPaidSearch(String name) throws SQLException {
+        List<MOrder> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn.prepareStatement("SELECT O.[OrderID], O.[CustomerID], C.[Name] AS [CustomerName], O.ShippingID, S.[ShippingName], [Status], [DateOrder], [DatePaid], O.UserIDCreated, U.[Name] AS [UserName] FROM tblOrder AS O INNER JOIN tblCustomer AS C ON O.CustomerID = C.CustomerID INNER JOIN tblShippingProvider AS S ON O.ShippingID = S.ShippingID INNER JOIN tblUser AS U ON O.UserIDCreated = U.UserID WHERE [Status] = 'Paid' AND (C.[Name] LIKE ? OR S.ShippingName LIKE ? OR U.Username LIKE ?)");
+            preSt.setString(1, "%" + name + "%");
+            preSt.setString(2, "%" + name + "%");
+            preSt.setString(3, "%" + name + "%");
+            ResultSet rs = preSt.executeQuery();
+
+            // Get Order Unpaid
+            rs = preSt.executeQuery();
+            while (rs.next()) {
+                res.add(new MOrder(
+                        new Order(rs.getInt("OrderID"),
+                                rs.getInt("CustomerID"),
+                                rs.getInt("ShippingID"),
+                                rs.getString("Status"),
+                                rs.getDate("DateOrder"),
+                                rs.getDate("DatePaid"),
+                                rs.getInt("UserIDCreated")),
+                        rs.getString("CustomerName"),
+                        rs.getString("ShippingName"),
+                        rs.getString("UserName")));
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Unpaid Order");
+        }
+        return res;
+    }
+
+    public int insertOrder(int customerID, int shippingID, int userIDCreated) throws SQLException {
+        int orderID = -1;
+        try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(INSERT);
-            preSt.setInt(1, order.getCustomerID());// CustomerID
-            preSt.setInt(2, order.getShippingID());// ShippingID
-            preSt.setInt(3, order.getUserIDCreated());// UserIDCreated
-            if (preSt.executeUpdate() == 1)
-                isInsertOrder = true;
-
+            preSt.setInt(1, customerID);// CustomerID
+            preSt.setInt(2, shippingID);// ShippingID
+            preSt.setInt(3, userIDCreated);// UserIDCreated
+            preSt.executeUpdate();
             // Get Instance ID key
             try (ResultSet generatedKeys = preSt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -80,20 +173,11 @@ public class OrderQuery {
                     throw new SQLException("Creating Order failed, no ID obtained.");
                 }
             }
-            for (OrderDetails item : order.getOrderDetails()) {
-                OrderDetailsQuery orderDetailsQuery = new OrderDetailsQuery(conn);
-                if (orderDetailsQuery.insertOrderDetails(item) == 1)
-                    isInsertOrderDetails = true;
-                else
-                    isInsertOrderDetails = false;
-            }
-            // If Order and OrderDetails are successfully inserted, return 1
-            if (isInsertOrder && isInsertOrderDetails)
-                return 1;
+
         } catch (SQLException ex) {
-            throw new SQLException("Failed to insert the order: " + order.toString());
+            throw new SQLException("Failed to insert new order");
         }
-        return -1;
+        return orderID;
     }
 
     public int updateOrder(Order order) throws SQLException {
@@ -104,8 +188,9 @@ public class OrderQuery {
             preSt.setInt(2, order.getShippingID());// ShippingID
             preSt.setString(3, order.getStatus());// Status
 
-            if (preSt.executeUpdate() == 1)
+            if (preSt.executeUpdate() == 1) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException("Failed to update the order: " + order.toString());
         }
@@ -116,8 +201,9 @@ public class OrderQuery {
         try {
             PreparedStatement preSt = this.conn.prepareStatement(DELETE);
             preSt.setInt(1, order.getOrderID());// OrderID
-            if (preSt.execute())
+            if (preSt.execute()) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException("Failed to delete the order with id: " + order.getOrderID());
         }

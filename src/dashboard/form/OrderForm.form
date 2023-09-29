@@ -84,7 +84,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addCustomerBtn1ActionPerformed"/>
       </Events>
     </Component>
-    <Component class="dashboard.components.tabledrawer.TableOrder" name="table">
+    <Component class="dashboard.components.tabledrawer.TableUnpaidOrder" name="table">
     </Component>
   </SubComponents>
 </Form>

@@ -9,23 +9,20 @@ public class Order {
     private int shippingID;
     private String status;
     private Date dateOrder, datePaid;
-    private List<OrderDetails> orderDetails;
     private int userIDCreated;
 
-    public Order(int orderID, int customerID, int shippingID, String status, Date dateOrder, Date datePaid,
-            List<OrderDetails> orderDetails, int userIDCreated) {
+    public Order(int orderID, int customerID, int shippingID, String status, Date dateOrder, Date datePaid, int userIDCreated) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.shippingID = shippingID;
         this.status = status;
         this.dateOrder = dateOrder;
         this.datePaid = datePaid;
-        this.orderDetails = orderDetails;
         this.userIDCreated = userIDCreated;
     }
 
     public int getOrderID() {
-        return this.orderID;
+        return orderID;
     }
 
     public void setOrderID(int orderID) {
@@ -33,7 +30,7 @@ public class Order {
     }
 
     public int getCustomerID() {
-        return this.customerID;
+        return customerID;
     }
 
     public void setCustomerID(int customerID) {
@@ -41,7 +38,7 @@ public class Order {
     }
 
     public int getShippingID() {
-        return this.shippingID;
+        return shippingID;
     }
 
     public void setShippingID(int shippingID) {
@@ -49,7 +46,7 @@ public class Order {
     }
 
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -57,7 +54,7 @@ public class Order {
     }
 
     public Date getDateOrder() {
-        return this.dateOrder;
+        return dateOrder;
     }
 
     public void setDateOrder(Date dateOrder) {
@@ -65,41 +62,21 @@ public class Order {
     }
 
     public Date getDatePaid() {
-        return this.datePaid;
+        return datePaid;
     }
 
     public void setDatePaid(Date datePaid) {
         this.datePaid = datePaid;
     }
 
-    public List<OrderDetails> getOrderDetails() {
-        return this.orderDetails;
-    }
-
-    public void setOrderDetails(List<OrderDetails> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-
     public int getUserIDCreated() {
-        return this.userIDCreated;
+        return userIDCreated;
     }
 
     public void setUserIDCreated(int userIDCreated) {
         this.userIDCreated = userIDCreated;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                " orderID='" + getOrderID() + "'" +
-                ", customerID='" + getCustomerID() + "'" +
-                ", shippingID='" + getShippingID() + "'" +
-                ", status='" + getStatus() + "'" +
-                ", dateOrder='" + getDateOrder() + "'" +
-                ", datePaid='" + getDatePaid() + "'" +
-                ", orderDetails='" + getOrderDetails() + "'" +
-                ", userIDCreated='" + getUserIDCreated() + "'" +
-                "}";
-    }
+    
 
 }
