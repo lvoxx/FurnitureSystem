@@ -11,8 +11,8 @@ import java.sql.Date;
 import java.util.List;
 import query.tool.model.Discount;
 
-
 public class CustomerQuery {
+
     private final String SELECT = "SELECT * FROM tblCustomer WHERE CustomerID = ?";
     private final String INSERT = "EXEC proc_InsertCustomer @DiscountID = ?, "
             + "@Name = ?, "
@@ -51,14 +51,50 @@ public class CustomerQuery {
             throw new SQLException("Failed to get Customer ID: " + customerIDs.toString());
         }
     }
+
+    public List<String> selectCustomerName() throws SQLException {
+        List<String> res = new ArrayList<>();
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("SELECT [Name] FROM tblCustomer");
+            ResultSet rs = preSt.executeQuery();
+
+            while (rs.next()) {
+                res.add(rs.getString("Name"));
+            }
+
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Customer Name List");
+        }
+        return res;
+    }
+
+    public int selectCustomerIDByName(String name) throws SQLException {
+        int res = -1;
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("SELECT [CustomerID] FROM tblCustomer WHERE [Name] LIKE ?");
+            preSt.setString(1, "%" + name + "%");
+            ResultSet rs = preSt.executeQuery();
+
+            if (rs.next()) {
+                res = rs.getInt("CustomerID");
+            }
+
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Customer Name List");
+        }
+        return res;
+    }
+
     public List<MCustomer> selectMCustomer() throws SQLException {
         try {
             List<MCustomer> res = new ArrayList<>();
             PreparedStatement preSt = preSt = this.conn
-                        .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID");
+                    .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID");
             ResultSet rs = preSt.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 int customerID = rs.getInt("CustomerID");
                 int discountID = rs.getInt("DiscountID");
                 String name = rs.getString("Name");
@@ -67,10 +103,10 @@ public class CustomerQuery {
                 Date dateAdded = rs.getDate("DateAdded");
                 int discount = rs.getInt("Discount");
                 String customerType = rs.getString("CustomerType");
-                
+
                 Customer tempC = new Customer(customerID, discountID, name, contactNo, address, dateAdded);
                 Discount tempD = new Discount(discountID, discount, customerType);
-                
+
                 res.add(new MCustomer(tempC, tempD));
             }
             return res;
@@ -78,15 +114,16 @@ public class CustomerQuery {
             throw new SQLException("Failed to get Customer List");
         }
     }
+
     public List<MCustomer> selectMCustomerSearch(String nameSearch) throws SQLException {
         try {
             List<MCustomer> res = new ArrayList<>();
             PreparedStatement preSt = preSt = this.conn
-                        .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID WHERE C.Name LIKE ?");
+                    .prepareStatement("SELECT [CustomerID], C.[DiscountID], [Name], [ContactNo], [Address], [DateAdded], [Discount], [CustomerType] FROM tblCustomer AS C INNER JOIN tblDiscount AS D ON c.DiscountID = d.DiscountID WHERE C.Name LIKE ?");
             preSt.setString(1, "%" + nameSearch + "%");
             ResultSet rs = preSt.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 int customerID = rs.getInt("CustomerID");
                 int discountID = rs.getInt("DiscountID");
                 String name = rs.getString("Name");
@@ -95,10 +132,10 @@ public class CustomerQuery {
                 Date dateAdded = rs.getDate("DateAdded");
                 int discount = rs.getInt("Discount");
                 String customerType = rs.getString("CustomerType");
-                
+
                 Customer tempC = new Customer(customerID, discountID, name, contactNo, address, dateAdded);
                 Discount tempD = new Discount(discountID, discount, customerType);
-                
+
                 res.add(new MCustomer(tempC, tempD));
             }
             return res;
@@ -116,8 +153,9 @@ public class CustomerQuery {
             preSt.setString(3, customer.getContactNo());// ContactNo
             preSt.setString(4, customer.getAddress());// Address
 
-            if (preSt.executeUpdate() == 1)
+            if (preSt.executeUpdate() == 1) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException("Failed to insert the customer " + customer.toString());
         }
@@ -133,8 +171,9 @@ public class CustomerQuery {
             preSt.setString(3, customer.getName());// Name
             preSt.setString(4, customer.getContactNo());// ContactNo
             preSt.setString(5, customer.getAddress());// Address
-            if (preSt.executeUpdate() == 1)
+            if (preSt.executeUpdate() == 1) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException("Failed to update the customer: " + customer.toString());
         }
@@ -145,8 +184,9 @@ public class CustomerQuery {
         try {
             PreparedStatement preSt = this.conn.prepareStatement(DELETE);
             preSt.setInt(1, customer.getCustomerID());
-            if (preSt.execute())
+            if (preSt.execute()) {
                 return 1;
+            }
         } catch (SQLException ex) {
             throw new SQLException("Failed to delete the customer with id: " + customer.getCustomerID());
         }

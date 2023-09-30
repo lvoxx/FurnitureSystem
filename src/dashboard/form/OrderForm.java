@@ -10,6 +10,7 @@ import dashboard.components.table.controllers.IData;
 import dashboard.components.table.controllers.IPaid;
 import dashboard.components.table.controllers.ISettings;
 import dashboard.components.table.frame_add.CostAddFrame;
+import dashboard.components.table.frame_add.UnPaidOrderAddFrame;
 import dashboard.components.textfield.EventCallBack;
 import dashboard.components.textfield.EventTextField;
 import java.awt.event.WindowEvent;
@@ -27,6 +28,8 @@ import query.tool.query.*;
 
 public class OrderForm extends javax.swing.JPanel {
 
+    private User user;
+
     private JFrame frame;
     private Connection conn;
     private OrderQuery queryO;
@@ -38,6 +41,7 @@ public class OrderForm extends javax.swing.JPanel {
     public OrderForm(JFrame frame, ISettings settings) {
         this.frame = frame;
         this.settings = settings;
+        this.user = this.settings.getUser();
         initComponents();
         //Get Cust Data From Database
         try {
@@ -132,6 +136,7 @@ public class OrderForm extends javax.swing.JPanel {
 
     private void loadData() {
         DefaultTableModel model = (DefaultTableModel) table.getTable().getModel();
+        //model.setRowCount(0);
         orders.stream().forEach((item) -> {
             //Load Data by Query
             String userName = item.getUserName();
@@ -154,7 +159,7 @@ public class OrderForm extends javax.swing.JPanel {
         }
         model.setRowCount(0);
         searchField.setText(null);
-        //model.fireTableDataChanged();
+        
         getUnpaidOrderDataFromDB();
         loadData();
 
@@ -300,8 +305,8 @@ public class OrderForm extends javax.swing.JPanel {
 
     private void addCustomerBtn1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addCustomerBtn1MouseClicked
         //Init new JFrame to fill data
-        CostAddFrame costFrame = new CostAddFrame(settings.getUser());
-        costFrame.addWindowListener(new WindowListener() {
+        UnPaidOrderAddFrame addOrderFrame = new UnPaidOrderAddFrame(settings.getUser());
+        addOrderFrame.addWindowListener(new WindowListener() {
             @Override
             public void windowClosing(WindowEvent e) {
 
@@ -338,7 +343,7 @@ public class OrderForm extends javax.swing.JPanel {
             }
 
         });
-        costFrame.show();
+        addOrderFrame.show();
     }//GEN-LAST:event_addCustomerBtn1MouseClicked
 
 

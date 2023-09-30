@@ -1,6 +1,7 @@
 package query.tool.query;
 
 import dashboard.components.model.MOrder;
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ public class OrderQuery {
 
     private final String INSERT = "EXEC proc_InsertOrder @CustomerID = ?, @ShippingID = ?, @UserIDCreated = ?";
     private final String UPDATE = "EXEC proc_UpdateOrder @OrderID = ?, @ShippingID = ?, @Status = ?";
-    private final String DELETE = "EXEC proc_DeleteOrder @OrderID = ?";
+    private final String HIDE = "EXEC proc_HideOrder @OrderID = ?, @Status = ?";
     private Connection conn;
 
     public OrderQuery(Connection conn) {
@@ -68,7 +69,7 @@ public class OrderQuery {
         }
         return res;
     }
-    
+
     public List<MOrder> selectOrderPaid() throws SQLException {
         List<MOrder> res = new ArrayList<>();
         try {
@@ -95,7 +96,7 @@ public class OrderQuery {
         }
         return res;
     }
-    
+
     public List<MOrder> selectOrderUnPaidSearch(String name) throws SQLException {
         List<MOrder> res = new ArrayList<>();
         try {
@@ -125,7 +126,7 @@ public class OrderQuery {
         }
         return res;
     }
-    
+
     public List<MOrder> selectOrderPaidSearch(String name) throws SQLException {
         List<MOrder> res = new ArrayList<>();
         try {
@@ -179,6 +180,30 @@ public class OrderQuery {
         }
         return orderID;
     }
+    //
+
+    public int insertOrderCustom(int customerID, int shippingID, int userIDCreated, String status) throws SQLException {
+        int orderID = -1;
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("INSERT INTO tblOrder ([CustomerID], [ShippingID], [UserIDCreated], [Status]) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            preSt.setInt(1, customerID);// CustomerID
+            preSt.setInt(2, shippingID);// ShippingID
+            preSt.setInt(3, userIDCreated);// UserIDCreated
+            preSt.setString(4, status);// Status
+            preSt.executeUpdate();
+            // Get Instance ID key
+            ResultSet generatedKeys = preSt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                orderID = generatedKeys.getInt(1);
+                System.out.println("Order ID: " + orderID);
+            }
+
+        } catch (SQLException ex) {
+            //throw new SQLException("Failed to insert new order");
+        }
+        return orderID;
+    }
 
     public int updateOrder(int orderID, int shippingID, String status) throws SQLException {
         try {
@@ -197,16 +222,32 @@ public class OrderQuery {
         return -1;
     }
 
-    public int deleteOrder(int orderID) throws SQLException {
+    public int hideOrder(int orderID) throws SQLException {
         try {
-            PreparedStatement preSt = this.conn.prepareStatement(DELETE);
+            PreparedStatement preSt = this.conn
+                    .prepareStatement(HIDE);
             preSt.setInt(1, orderID);// OrderID
-            if (preSt.execute()) {
+            preSt.setString(2, "Hiden");// Status
+
+            if (preSt.executeUpdate() == 1) {
                 return 1;
             }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to delete the order with id: " + orderID);
+            throw new SQLException("Failed to update the order: " + orderID);
         }
         return -1;
     }
+
+//    public int deleteOrder(int orderID) throws SQLException {
+//        try {
+//            PreparedStatement preSt = this.conn.prepareStatement(DELETE);
+//            preSt.setInt(1, orderID);// OrderID
+//            if (preSt.executeUpdate() == 1) {
+//                return 1;
+//            }
+//        } catch (SQLException ex) {
+//            throw new SQLException("Failed to delete the order with id: " + orderID);
+//        }
+//        return -1;
+//    }
 }

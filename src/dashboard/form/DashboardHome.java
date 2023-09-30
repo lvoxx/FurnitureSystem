@@ -14,7 +14,6 @@ public class DashboardHome extends javax.swing.JPanel {
         initComponents();
         card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/dashboard/icon/stock.png")), "Stock Total", "$200000", "Increased by 60%"));
         card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/dashboard/icon/profit.png")), "Total Profit", "$15000", "Increased by 25%"));
-        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/dashboard/icon/flag.png")), "Unique Visitors", "$300000", "Increased by 70%"));
         //  add row table
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
@@ -24,20 +23,20 @@ public class DashboardHome extends javax.swing.JPanel {
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
         
         
-        table.addRow(new Object[]{"Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
+        table.addRow(new Object[]{"Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
         table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.APPROVED});
         table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.REJECT});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
+        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
+        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
         table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.APPROVED});
         table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.REJECT});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
+        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
+        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
+        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
         table.addRow(new Object[]{"Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018", StatusType.APPROVED});
         table.addRow(new Object[]{"Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018", StatusType.APPROVED});
-        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.REJECT});
-        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.PENDING});
+        table.addRow(new Object[]{"Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
+        table.addRow(new Object[]{"Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018", StatusType.APPROVED});
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +46,6 @@ public class DashboardHome extends javax.swing.JPanel {
         panel = new javax.swing.JLayeredPane();
         card1 = new dashboard.component.Card();
         card2 = new dashboard.component.Card();
-        card3 = new dashboard.component.Card();
         panelBorder1 = new dashboard.swing.PanelBorder();
         jLabel1 = new javax.swing.JLabel();
         spTable = new javax.swing.JScrollPane();
@@ -65,15 +63,11 @@ public class DashboardHome extends javax.swing.JPanel {
         card2.setColor2(new java.awt.Color(167, 94, 236));
         panel.add(card2);
 
-        card3.setColor1(new java.awt.Color(241, 208, 62));
-        card3.setColor2(new java.awt.Color(211, 184, 61));
-        panel.add(card3);
-
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(127, 127, 127));
-        jLabel1.setText("Standard Table Design");
+        jLabel1.setText("Recent payment order");
 
         spTable.setBorder(null);
 
@@ -82,7 +76,7 @@ public class DashboardHome extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Name", "Email", "User Type", "Joined", "Status"
+                "UserID Created", "Customer Name", "Date of payment", "Total", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -144,7 +138,6 @@ public class DashboardHome extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private dashboard.component.Card card1;
     private dashboard.component.Card card2;
-    private dashboard.component.Card card3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane panel;
     private dashboard.swing.PanelBorder panelBorder1;

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package dashboard.components.table.frame_edit;
+package dashboard.components.table.frame_add;
 
 import dashboard.components.table.controllers.IAlert;
 import dashboard.components.table.controllers.IData;
@@ -15,12 +15,13 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import java.sql.*;
-import java.util.Arrays;
 import javax.swing.table.DefaultTableModel;
 import query.connect.Settings;
 import query.tool.model.OrderDetails;
 import query.tool.model.Product;
 import query.tool.model.ShippingProvider;
+import query.tool.model.User;
+import query.tool.query.CustomerQuery;
 import query.tool.query.OrderDetailsQuery;
 import query.tool.query.OrderQuery;
 import query.tool.query.ProductQuery;
@@ -30,25 +31,29 @@ import query.tool.query.ShippingProviderQuery;
  *
  * @author Admin
  */
-public class UnPaidOrderEditFrame extends javax.swing.JFrame {
+public class UnPaidOrderAddFrame extends javax.swing.JFrame {
 
     private JFrame frame;
     private IData dataI;
     private IPaid paidI;
     private Connection conn;
-    private ShippingProviderQuery query;
+    private ShippingProviderQuery queryS;
+    private CustomerQuery queryC;
 
-    private Object[] rowData;
+    private User user;
     private List<ShippingProvider> shippingCategory;
+    private List<String> customerCategory;
     private List<OrderDetails> orderDetails;
     private boolean isQuantityValid = true;
     private boolean isFixedPriceValid = true;
 
-    public UnPaidOrderEditFrame(Object[] data) {
+    public UnPaidOrderAddFrame(User user) {
         this.setUndecorated(true);
         this.getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         initComponents();
         this.frame = this;
+        this.user = user;
+        tableUnpaidOrderDetails1.getTable().getColumnModel().getColumn(0).setHeaderValue("Product ID");
         getContentPane().setBackground(Color.white);
         setLocationRelativeTo(null);
 
@@ -58,25 +63,19 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
         try {
             this.conn = Settings.BuildConnect();
         } catch (SQLException ex) {
-            Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UnPaidOrderAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.rowData = data;
         getData();
         setData();
 
         dataI = new IData() {
             @Override
             public void addAllRow() {
-                loadOrderDetails();
             }
 
             @Override
             public void refreshData() {
-//                try {
-//                    reloadData();
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(CostForm.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+                //setTotalPrice();
             }
         };
         this.tableUnpaidOrderDetails1.setAlert(new IAlert() {
@@ -96,57 +95,48 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
 
             @Override
             public void setNewTotal(String total) {
-                totalPrice.setText(total);
+                setTotalPrice();
+                //totalPrice.setText(total);
             }
 
         });
-        tableUnpaidOrderDetails1.setData(dataI);
-        setTotalPrice();
+        //tableUnpaidOrderDetails1.setData(dataI);
+        //setTotalPrice();
         tableUnpaidOrderDetails1.setFrame(frame);
     }
 
     public void setData() {
+        //Customer Choose
+        for (String i : customerCategory) {
+            customerChooseBox.addItem(i);
+        }
+
+        //Status Choose
         StatusChoose.addItem("UnPaid");
         StatusChoose.addItem("Paid");
 
-        shippingChooseBox.addItem(rowData[2].toString());
+        //Shipping Category Choose
         for (ShippingProvider i : shippingCategory) {
-            if (i.getShippingName().equals(rowData[2].toString())) {
-                continue;
-            }
             shippingChooseBox.addItem(i.getShippingName());
         }
 
-        customerNameBox.setText(rowData[1].toString());
-        orderIDBox.setText(rowData[0].toString());
-        dateOrderBox.setText(rowData[4].toString());
-        userCreatedBox.setText(rowData[5].toString());
-    }
+        //UserID Created
+        userCreatedBox.setText(this.user.getName());
+//        customerNameBox.setText(rowData[1].toString());
+//        orderIDBox.setText(rowData[0].toString());
+//        dateOrderBox.setText(rowData[4].toString());
 
-    public void loadOrderDetails() {
-        //Load all order details by ID
-        DefaultTableModel model = (DefaultTableModel) tableUnpaidOrderDetails1.getTable().getModel();
-        orderDetails.stream().forEach((item) -> {
-            //Load Data to table
-            String productName = "";
-            try {
-                productName = new ProductQuery(this.conn).selectProduct(Arrays.asList(item.getProductID())).get(0).getProductName();
-                model.addRow(new Object[]{item.getOrderID(), productName, item.getQuantity(), item.getFixedPrice(), item.getQuantity() * item.getFixedPrice()});
-            } catch (SQLException ex) {
-                Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        });
-        model.fireTableDataChanged();
     }
 
     public void getData() {
         try {
-            query = new ShippingProviderQuery(this.conn);
-            shippingCategory = query.selectShippingProvider();
-            orderDetails = new OrderDetailsQuery(this.conn).selectOrderDetails(Integer.valueOf(rowData[0].toString()));
+            queryS = new ShippingProviderQuery(this.conn);
+            queryC = new CustomerQuery(this.conn);
+
+            shippingCategory = queryS.selectShippingProvider();
+            customerCategory = queryC.selectCustomerName();
         } catch (SQLException ex) {
-            Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UnPaidOrderAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -174,9 +164,6 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        orderIDBox = new textfield.swing.TextField();
-        customerNameBox = new textfield.swing.TextField();
-        dateOrderBox = new textfield.swing.TextField();
         userCreatedBox = new textfield.swing.TextField();
         closeBtn = new swing.MyButton();
         StatusChoose = new dashboard.components.combobox.Combobox();
@@ -187,8 +174,9 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
         tableUnpaidOrderDetails1 = new dashboard.components.tabledrawer.TableUnpaidOrderDetails();
         jLabel2 = new javax.swing.JLabel();
         totalPrice = new javax.swing.JLabel();
-        suggestionBox1 = new swing.SuggestionBox();
-        myButton1 = new swing.MyButton();
+        productSuggestionBox = new swing.SuggestionBox();
+        addProductBtn = new swing.MyButton();
+        customerChooseBox = new dashboard.components.combobox.Combobox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -198,38 +186,7 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("sansserif", 1, 32)); // NOI18N
-        jLabel1.setText("Edit Order Info");
-
-        orderIDBox.setEditable(false);
-        orderIDBox.setText("CostID");
-        orderIDBox.setLabelText("Order ID");
-        orderIDBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                orderIDBoxActionPerformed(evt);
-            }
-        });
-
-        customerNameBox.setEditable(false);
-        customerNameBox.setText("Contact");
-        customerNameBox.setLabelText("Customer Name");
-        customerNameBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customerNameBoxActionPerformed(evt);
-            }
-        });
-
-        dateOrderBox.setText("Date Added");
-        dateOrderBox.setLabelText("Date Order");
-        dateOrderBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateOrderBoxActionPerformed(evt);
-            }
-        });
-        dateOrderBox.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                dateOrderBoxKeyReleased(evt);
-            }
-        });
+        jLabel1.setText("Add Order Info");
 
         userCreatedBox.setEditable(false);
         userCreatedBox.setText("Discount");
@@ -283,53 +240,55 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
         jLabel2.setText("TOTAL:");
 
         totalPrice.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        totalPrice.setText("999");
+        totalPrice.setText("0 $");
 
-        suggestionBox1.setForeground(new java.awt.Color(255, 255, 255));
-        suggestionBox1.setToolTipText("");
+        productSuggestionBox.setForeground(new java.awt.Color(255, 255, 255));
+        productSuggestionBox.setToolTipText("");
 
-        myButton1.setBackground(new java.awt.Color(0, 255, 255));
-        myButton1.setForeground(new java.awt.Color(0, 0, 0));
-        myButton1.setText("Add");
-        myButton1.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        myButton1.addActionListener(new java.awt.event.ActionListener() {
+        addProductBtn.setBackground(new java.awt.Color(0, 255, 255));
+        addProductBtn.setForeground(new java.awt.Color(0, 0, 0));
+        addProductBtn.setText("Add");
+        addProductBtn.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        addProductBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                myButton1ActionPerformed(evt);
+                addProductBtnActionPerformed(evt);
             }
         });
+
+        customerChooseBox.setLabeText("Customer Name");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(totalPrice)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(customerChooseBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(addProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(totalPrice)
+                                    .addComponent(userCreatedBox, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(shippingChooseBox, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(StatusChoose, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(productSuggestionBox, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(alertQuantity)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(35, 35, 35)
-                                .addComponent(alertFixedPrice))))
-                    .addComponent(StatusChoose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(shippingChooseBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(orderIDBox, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(customerNameBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(userCreatedBox, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dateOrderBox, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(suggestionBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(myButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addComponent(alertFixedPrice)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tableUnpaidOrderDetails1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -352,49 +311,33 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
                         .addGap(23, 23, 23))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(orderIDBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(customerNameBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(userCreatedBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dateOrderBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addComponent(userCreatedBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(customerChooseBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(shippingChooseBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(StatusChoose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(suggestionBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(myButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(productSuggestionBox, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(addProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
                         .addComponent(alertQuantity)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(alertFixedPrice)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalPrice)
-                        .addContainerGap())))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         tableUnpaidOrderDetails1.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void orderIDBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderIDBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_orderIDBoxActionPerformed
-
-    private void customerNameBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNameBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_customerNameBoxActionPerformed
-
-    private void dateOrderBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateOrderBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateOrderBoxActionPerformed
 
     private void userCreatedBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userCreatedBoxActionPerformed
         // TODO add your handling code here:
@@ -412,29 +355,33 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
         if (isQuantityValid && isFixedPriceValid) {
             try {
                 //UPDATE ORDER
-                int orderID = Integer.parseInt(orderIDBox.getText());
+                int orderID = 0;
+
+                int userIDCreated = user.getUserID();
+                int customerID = new CustomerQuery(Settings.BuildConnect()).selectCustomerIDByName(customerChooseBox.getSelectedItem().toString());
                 int shippingID = new ShippingProviderQuery(Settings.BuildConnect()).selectShippingProviderByName(shippingChooseBox.getSelectedItem().toString()).getShippingID();
                 String status = StatusChoose.getSelectedItem().toString();
-                new OrderQuery(Settings.BuildConnect()).updateOrder(orderID, shippingID, status);
+
+                orderID = new OrderQuery(Settings.BuildConnect()).insertOrderCustom(customerID, shippingID, userIDCreated, status);
 
                 //UPDATE ORDER DETAILS
-                
                 DefaultTableModel model = (DefaultTableModel) tableUnpaidOrderDetails1.getTable().getModel();
                 int rows = model.getRowCount();
                 System.out.println(rows);
-                new OrderDetailsQuery(Settings.BuildConnect()).deleteAllOrderDetails(orderID);
+                //new OrderDetailsQuery(Settings.BuildConnect()).deleteAllOrderDetails(orderID);
                 for (int i = 0; i < rows; ++i) {
-                    int orderDtlsID = Integer.parseInt(model.getValueAt(i, 0).toString());
-                    int productID = new ProductQuery(Settings.BuildConnect()).selectProductByName(model.getValueAt(i, 1).toString()).getProductID();
-                    int quantity = Integer.parseInt(model.getValueAt(i, 2).toString());
-                    int fixedPrice = Integer.parseInt(model.getValueAt(i, 3).toString());             
                     
-                    OrderDetails item = new OrderDetails(orderDtlsID, productID, quantity, fixedPrice);
-                    new OrderDetailsQuery(Settings.BuildConnect()).upsertOrderDetails(item);
+                    int productID = Integer.parseInt(model.getValueAt(i, 0).toString());
+                    int quantity = Integer.parseInt(model.getValueAt(i, 2).toString());
+                    int fixedPrice = Integer.parseInt(model.getValueAt(i, 3).toString());
+
+                    OrderDetails item = new OrderDetails(orderID, productID, quantity, fixedPrice);
+                    System.out.println(item);
+                    new OrderDetailsQuery(Settings.BuildConnect()).insertOrderDetails(item);
                 }
 
             } catch (SQLException ex) {
-                Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(UnPaidOrderAddFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (StatusChoose.getSelectedItem().toString().equalsIgnoreCase("Paid")) {
                 this.paidI.makeEventOrderChange();
@@ -443,43 +390,37 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_okBtnMouseClicked
 
-    private void dateOrderBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateOrderBoxKeyReleased
-
-    }//GEN-LAST:event_dateOrderBoxKeyReleased
-
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
     }//GEN-LAST:event_okBtnActionPerformed
 
-    private void myButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myButton1ActionPerformed
+    private void addProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductBtnActionPerformed
         try {
             //System.out.print(suggestionBox1.getText());            
-            if (!suggestionBox1.getText().isEmpty()) {
-                Product productSearch = new ProductQuery(Settings.BuildConnect()).selectProductByName(suggestionBox1.getText());
+            if (!productSuggestionBox.getText().isEmpty()) {
+                Product productSearch = new ProductQuery(Settings.BuildConnect()).selectProductByName(productSuggestionBox.getText());
                 DefaultTableModel model = (DefaultTableModel) tableUnpaidOrderDetails1.getTable().getModel();
-                model.addRow(new Object[]{rowData[0].toString(), productSearch.getProductName(), 1, productSearch.getPrice(), productSearch.getPrice()});
+                model.addRow(new Object[]{productSearch.getProductID(), productSearch.getProductName(), 1, productSearch.getPrice(), productSearch.getPrice()});
                 model.fireTableDataChanged();
                 setTotalPrice();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UnPaidOrderAddFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_myButton1ActionPerformed
+    }//GEN-LAST:event_addProductBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private dashboard.components.combobox.Combobox StatusChoose;
+    private swing.MyButton addProductBtn;
     private javax.swing.JLabel alertFixedPrice;
     private javax.swing.JLabel alertQuantity;
     private swing.MyButton closeBtn;
-    private textfield.swing.TextField customerNameBox;
-    private textfield.swing.TextField dateOrderBox;
+    private dashboard.components.combobox.Combobox customerChooseBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private swing.MyButton myButton1;
     private swing.MyButton okBtn;
-    private textfield.swing.TextField orderIDBox;
+    private swing.SuggestionBox productSuggestionBox;
     private dashboard.components.combobox.Combobox shippingChooseBox;
-    private swing.SuggestionBox suggestionBox1;
     private dashboard.components.tabledrawer.TableUnpaidOrderDetails tableUnpaidOrderDetails1;
     private javax.swing.JLabel totalPrice;
     private textfield.swing.TextField userCreatedBox;

@@ -77,7 +77,7 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
                     model.fireTableDataChanged();
                 }
                 alert.setNewTotal(String.valueOf(getNewPrice(row, 0)) + " $");
-                   
+
             }
 
             @Override
@@ -111,6 +111,7 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
                         table.getModel().setValueAt(newSubtotal, row, 4);
                         alert.alertQuantityOn(false);
                         alert.setNewTotal(String.valueOf(getNewPrice(row, newSubtotal)) + " $");
+                        return;
                     } else {
                         alert.alertQuantityOn(true);
                     }
@@ -122,12 +123,13 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
                         table.getModel().setValueAt(newSubtotal, row, 4);
                         alert.alertFixedPriceOn(false);
                         alert.setNewTotal(String.valueOf(getNewPrice(row, newSubtotal)) + " $");
+                        return;
                     } else {
                         alert.alertFixedPriceOn(true);
                     }
                 }
-
             }
+
         };
 
         TableCellListener tclFixedPrice = new TableCellListener(table, action);
@@ -139,8 +141,9 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
         for (int i = 0; i < rows; ++i) {
             if (i == newRow) {
                 total += newSubtotal;
+            } else {
+                total += Integer.valueOf(table.getModel().getValueAt(i, 2).toString()) * Integer.valueOf(table.getModel().getValueAt(i, 3).toString());
             }
-            total += Integer.valueOf(table.getModel().getValueAt(i, 2).toString()) * Integer.valueOf(table.getModel().getValueAt(i, 3).toString());
         }
 
         return total;

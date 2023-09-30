@@ -72,16 +72,6 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="dashboard.component.Card" name="card3">
-          <Properties>
-            <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="3e" green="d0" red="f1" type="rgb"/>
-            </Property>
-            <Property name="color2" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="3d" green="b8" red="d3" type="rgb"/>
-            </Property>
-          </Properties>
-        </Component>
       </SubComponents>
     </Container>
     <Container class="dashboard.swing.PanelBorder" name="panelBorder1">
@@ -128,7 +118,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="7f" green="7f" red="7f" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Standard Table Design"/>
+            <Property name="text" type="java.lang.String" value="Recent payment order"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="spTable">
@@ -147,10 +137,10 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="5" rowCount="0">
-                    <Column editable="false" title="Name" type="java.lang.Object"/>
-                    <Column editable="false" title="Email" type="java.lang.Object"/>
-                    <Column editable="false" title="User Type" type="java.lang.Object"/>
-                    <Column editable="false" title="Joined" type="java.lang.Object"/>
+                    <Column editable="false" title="UserID Created" type="java.lang.Object"/>
+                    <Column editable="false" title="Customer Name" type="java.lang.Object"/>
+                    <Column editable="false" title="Date of payment" type="java.lang.Object"/>
+                    <Column editable="false" title="Total" type="java.lang.Object"/>
                     <Column editable="false" title="Status" type="java.lang.Object"/>
                   </Table>
                 </Property>

@@ -11,7 +11,7 @@ import java.util.List;
 public class OrderDetailsQuery {
 
     private final String SELECT = "SELECT * FROM tblOrderDetails WHERE OrderID = ?";
-    private final String INSERT = "EXEC proc_InsertOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?";
+    private final String INSERT = "EXEC proc_InsertOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?, @FixedPrice = ?";
     private final String UPDATE = "EXEC proc_UpdateOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?, @FixedPrice = ?";
     private final String UPSERT = "EXEC proc_UpsertOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?, @FixedPrice = ?";
     private final String DELETE = "EXEC proc_DeleteOrderDetails @OrderID = ?, @ProductID = ?";
@@ -41,13 +41,14 @@ public class OrderDetailsQuery {
         return res;
     }
 
-    public int insertOrderDetails(int orderID, int productID, int quantity) throws SQLException {
+    public int insertOrderDetails(OrderDetails item) throws SQLException {
         try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(INSERT);
-            preSt.setInt(1, orderID);// OrderID
-            preSt.setInt(2, productID);// ProductID
-            preSt.setInt(3, quantity);// Quantity
+            preSt.setInt(1, item.getOrderID());// OrderID
+            preSt.setInt(2, item.getProductID());// ProductID
+            preSt.setInt(3, item.getQuantity());// Quantity
+            preSt.setInt(4, item.getFixedPrice());// Quantity
 
             if (preSt.executeUpdate() == 1) {
                 return 1;

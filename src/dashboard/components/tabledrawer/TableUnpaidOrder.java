@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import notifi.swing.Notification;
 import query.connect.Settings;
 import query.tool.query.OrderQuery;
 
@@ -53,7 +54,8 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
     public void setFrame(JFrame frame) {
         this.frame = frame;
     }
-    public void setIPaid(IPaid paidI){
+
+    public void setIPaid(IPaid paidI) {
         this.paidI = paidI;
     }
 
@@ -86,6 +88,8 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
 
                     @Override
                     public void windowClosed(WindowEvent e) {
+                        Notification notif = new Notification(frame, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, "Edit Order Success");
+                        notif.showNotification();
                         data.refreshData();
                     }
 
@@ -115,21 +119,25 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
 //                    if (table.isEditing()) {
 //                        table.getCellEditor().stopCellEditing();
 //                    }
-//                    DefaultTableModel model = (DefaultTableModel) table.getModel();
-//                    model.removeRow(row);
-                    Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
+                    System.out.println("Row is: " + row);
+                    DefaultTableModel model = (DefaultTableModel) table.getModel();
+                    Object[] rowData = getRowAt(row, (DefaultTableModel) model);
                     MessageDialog dialog = new MessageDialog(frame);
-                    dialog.showMessage("Delete order id: " + rowData[0].toString(), "Deleted data cannot be recovered");
-                    if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
+                    dialog.showMessage("Delete order" + rowData[0].toString(), "Deleted data cannot be recovered");
+                    if (dialog.getMessageType() == MessageDialog.MessageType.OK) {
                         //Delete row on SQL server
                         OrderQuery query = new OrderQuery(Settings.BuildConnect());
-                        query.deleteOrder(Integer.valueOf(rowData[0].toString()));
+                        query.hideOrder(Integer.valueOf(rowData[0].toString()));
+                        System.out.println(rowData[0].toString());
                         //Refresh table in client
                         data.refreshData();
                     }
                 } catch (SQLException ex) {
-                    Logger.getLogger(TableUnpaidOrder.class.getName()).log(Level.SEVERE, null, ex);
+                    Notification notif = new Notification(frame, Notification.Type.WARNING, Notification.Location.TOP_CENTER, "Delete Order Failed");
+                    notif.showNotification();
                 }
+                Notification notif = new Notification(frame, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, "Delete Order Success");
+                notif.showNotification();
             }
 
             @Override
