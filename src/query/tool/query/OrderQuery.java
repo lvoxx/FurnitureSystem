@@ -180,19 +180,19 @@ public class OrderQuery {
         return orderID;
     }
 
-    public int updateOrder(Order order) throws SQLException {
+    public int updateOrder(int orderID, int shippingID, String status) throws SQLException {
         try {
             PreparedStatement preSt = this.conn
                     .prepareStatement(UPDATE);
-            preSt.setInt(1, order.getOrderID());// OrderID
-            preSt.setInt(2, order.getShippingID());// ShippingID
-            preSt.setString(3, order.getStatus());// Status
+            preSt.setInt(1, orderID);// OrderID
+            preSt.setInt(2, shippingID);// ShippingID
+            preSt.setString(3, status);// Status
 
             if (preSt.executeUpdate() == 1) {
                 return 1;
             }
         } catch (SQLException ex) {
-            throw new SQLException("Failed to update the order: " + order.toString());
+            throw new SQLException("Failed to update the order: " + orderID);
         }
         return -1;
     }

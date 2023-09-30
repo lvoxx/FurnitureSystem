@@ -5,6 +5,7 @@
 package dashboard.components.tabledrawer;
 
 import dashboard.components.table.controllers.IData;
+import dashboard.components.table.controllers.IPaid;
 import dashboard.components.table.frame_edit.UnPaidOrderEditFrame;
 import dashboard.components.table.frame_view.UnPaidOrderViewFrame;
 import dashboard.components.table.swing.TableActionCellEditor;
@@ -31,6 +32,7 @@ import query.tool.query.OrderQuery;
 public class TableUnpaidOrder extends javax.swing.JPanel {
 
     private IData data;
+    private IPaid paidI;
     private final int ACTION_COLL = 6;
     private JFrame frame;
 
@@ -50,6 +52,9 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
 
     public void setFrame(JFrame frame) {
         this.frame = frame;
+    }
+    public void setIPaid(IPaid paidI){
+        this.paidI = paidI;
     }
 
     // ------------------------------------------------------------------------------------
@@ -100,8 +105,8 @@ public class TableUnpaidOrder extends javax.swing.JPanel {
                     }
 
                 });
+                orderFrame.setIPaid(paidI);
                 orderFrame.show();
-
             }
 
             @Override

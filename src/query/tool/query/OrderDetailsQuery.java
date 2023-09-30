@@ -13,6 +13,7 @@ public class OrderDetailsQuery {
     private final String SELECT = "SELECT * FROM tblOrderDetails WHERE OrderID = ?";
     private final String INSERT = "EXEC proc_InsertOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?";
     private final String UPDATE = "EXEC proc_UpdateOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?, @FixedPrice = ?";
+    private final String UPSERT = "EXEC proc_UpsertOrderDetails @OrderID = ?, @ProductID = ?, @Quantity = ?, @FixedPrice = ?";
     private final String DELETE = "EXEC proc_DeleteOrderDetails @OrderID = ?, @ProductID = ?";
     private Connection conn;
 
@@ -74,6 +75,23 @@ public class OrderDetailsQuery {
         }
         return -1;
     }
+    public int upsertOrderDetails(OrderDetails orderDetails) throws SQLException {
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement(UPSERT);
+            preSt.setInt(1, orderDetails.getOrderID());// OrderID
+            preSt.setInt(2, orderDetails.getProductID());// ProductID
+            preSt.setInt(3, orderDetails.getQuantity());// Quantity
+            preSt.setInt(4, orderDetails.getFixedPrice());// FixedPrice
+
+            if (preSt.executeUpdate() == 1) {
+                return 1;
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to update the order details: " + orderDetails.toString());
+        }
+        return -1;
+    }
 
     public int deleteOrderDetails(OrderDetails orderDetails) throws SQLException {
         try {
@@ -85,6 +103,19 @@ public class OrderDetailsQuery {
             }
         } catch (SQLException ex) {
             throw new SQLException("Failed to delete the order details with id: " + orderDetails.getOrderID());
+        }
+        return -1;
+    }
+    
+    public int deleteAllOrderDetails(int orderID) throws SQLException {
+        try {
+            PreparedStatement preSt = this.conn.prepareStatement("DELETE FROM tblOrderDetails WHERE [OrderID] = ?");
+            preSt.setInt(1, orderID);// OrderID
+            if (preSt.execute()) {
+                return 1;
+            }
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to delete the order details with id: " + orderID);
         }
         return -1;
     }

@@ -74,9 +74,10 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
                 if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
                     DefaultTableModel model = (DefaultTableModel) table.getModel();
                     model.removeRow(row);
+                    model.fireTableDataChanged();
                 }
                 alert.setNewTotal(String.valueOf(getNewPrice(row, 0)) + " $");
-
+                   
             }
 
             @Override

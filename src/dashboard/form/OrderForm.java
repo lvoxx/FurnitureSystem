@@ -7,6 +7,7 @@ package dashboard.form;
 
 import dashboard.components.model.*;
 import dashboard.components.table.controllers.IData;
+import dashboard.components.table.controllers.IPaid;
 import dashboard.components.table.controllers.ISettings;
 import dashboard.components.table.frame_add.CostAddFrame;
 import dashboard.components.textfield.EventCallBack;
@@ -31,6 +32,7 @@ public class OrderForm extends javax.swing.JPanel {
     private OrderQuery queryO;
     private List<MOrder> orders;
     private IData data;
+    private IPaid paid;
     private ISettings settings;
 
     public OrderForm(JFrame frame, ISettings settings) {
@@ -110,9 +112,21 @@ public class OrderForm extends javax.swing.JPanel {
                 }
             }
         };
+        paid = new IPaid() {
+            @Override
+            public void makeEventOrderChange() {
+                try {
+                    reloadData();
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        };
 
         //Settings
         table.setData(data);
+        table.setIPaid(paid);
         table.setFrame(frame);
     }
 
@@ -124,7 +138,7 @@ public class OrderForm extends javax.swing.JPanel {
             String cusName = item.getCustomer();
             String shippName = item.getShippingProvider();
             Order order = item.getOrder();
-            
+
             //ID - CUSTOMER NAME - SHIPPING NAME - STATUS - DATE ORDER - USER CREATED
             model.addRow(new Object[]{order.getOrderID(), cusName, shippName, order.getStatus(), order.getDateOrder(), userName});
         });

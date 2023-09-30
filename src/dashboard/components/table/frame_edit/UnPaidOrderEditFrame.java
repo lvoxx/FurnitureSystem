@@ -6,6 +6,7 @@ package dashboard.components.table.frame_edit;
 
 import dashboard.components.table.controllers.IAlert;
 import dashboard.components.table.controllers.IData;
+import dashboard.components.table.controllers.IPaid;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,6 +22,7 @@ import query.tool.model.OrderDetails;
 import query.tool.model.Product;
 import query.tool.model.ShippingProvider;
 import query.tool.query.OrderDetailsQuery;
+import query.tool.query.OrderQuery;
 import query.tool.query.ProductQuery;
 import query.tool.query.ShippingProviderQuery;
 
@@ -32,14 +34,15 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
 
     private JFrame frame;
     private IData dataI;
+    private IPaid paidI;
     private Connection conn;
     private ShippingProviderQuery query;
 
     private Object[] rowData;
     private List<ShippingProvider> shippingCategory;
     private List<OrderDetails> orderDetails;
-    private boolean isQuantityValid = false;
-    private boolean isFixedPriceValid = false;
+    private boolean isQuantityValid = true;
+    private boolean isFixedPriceValid = true;
 
     public UnPaidOrderEditFrame(Object[] data) {
         this.setUndecorated(true);
@@ -80,13 +83,15 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
             @Override
             public void alertQuantityOn(boolean isVisible) {
                 alertQuantity.setVisible(isVisible);
-                isQuantityValid = isVisible;
+                isQuantityValid = !isVisible;
+                //System.out.println("Quantity " + isQuantityValid);
             }
 
             @Override
             public void alertFixedPriceOn(boolean isVisible) {
                 alertFixedPrice.setVisible(isVisible);
-                isQuantityValid = isVisible;
+                isFixedPriceValid = !isVisible;
+                //System.out.println("FixedPrice " + isFixedPriceValid);
             }
 
             @Override
@@ -153,6 +158,10 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
             total += Integer.valueOf(model.getValueAt(i, 4).toString());
         }
         totalPrice.setText(total + " $");
+    }
+
+    public void setIPaid(IPaid paidI) {
+        this.paidI = paidI;
     }
 
     /**
@@ -400,14 +409,38 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-//        if (isQuantityValid && isFixedPriceValid) {
-//            try {
-//                
-//            } catch (SQLException ex) {
-//                Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            frame.dispose();
-//        }
+        if (isQuantityValid && isFixedPriceValid) {
+            try {
+                //UPDATE ORDER
+                int orderID = Integer.parseInt(orderIDBox.getText());
+                int shippingID = new ShippingProviderQuery(Settings.BuildConnect()).selectShippingProviderByName(shippingChooseBox.getSelectedItem().toString()).getShippingID();
+                String status = StatusChoose.getSelectedItem().toString();
+                new OrderQuery(Settings.BuildConnect()).updateOrder(orderID, shippingID, status);
+
+                //UPDATE ORDER DETAILS
+                
+                DefaultTableModel model = (DefaultTableModel) tableUnpaidOrderDetails1.getTable().getModel();
+                int rows = model.getRowCount();
+                System.out.println(rows);
+                new OrderDetailsQuery(Settings.BuildConnect()).deleteAllOrderDetails(orderID);
+                for (int i = 0; i < rows; ++i) {
+                    int orderDtlsID = Integer.parseInt(model.getValueAt(i, 0).toString());
+                    int productID = new ProductQuery(Settings.BuildConnect()).selectProductByName(model.getValueAt(i, 1).toString()).getProductID();
+                    int quantity = Integer.parseInt(model.getValueAt(i, 2).toString());
+                    int fixedPrice = Integer.parseInt(model.getValueAt(i, 3).toString());             
+                    
+                    OrderDetails item = new OrderDetails(orderDtlsID, productID, quantity, fixedPrice);
+                    new OrderDetailsQuery(Settings.BuildConnect()).upsertOrderDetails(item);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (StatusChoose.getSelectedItem().toString().equalsIgnoreCase("Paid")) {
+                this.paidI.makeEventOrderChange();
+            }
+            frame.dispose();
+        }
     }//GEN-LAST:event_okBtnMouseClicked
 
     private void dateOrderBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateOrderBoxKeyReleased
@@ -415,7 +448,6 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_dateOrderBoxKeyReleased
 
     private void okBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okBtnActionPerformed
-
     }//GEN-LAST:event_okBtnActionPerformed
 
     private void myButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myButton1ActionPerformed
@@ -425,6 +457,7 @@ public class UnPaidOrderEditFrame extends javax.swing.JFrame {
                 Product productSearch = new ProductQuery(Settings.BuildConnect()).selectProductByName(suggestionBox1.getText());
                 DefaultTableModel model = (DefaultTableModel) tableUnpaidOrderDetails1.getTable().getModel();
                 model.addRow(new Object[]{rowData[0].toString(), productSearch.getProductName(), 1, productSearch.getPrice(), productSearch.getPrice()});
+                model.fireTableDataChanged();
             }
         } catch (SQLException ex) {
             Logger.getLogger(UnPaidOrderEditFrame.class.getName()).log(Level.SEVERE, null, ex);
