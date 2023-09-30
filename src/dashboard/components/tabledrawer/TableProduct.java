@@ -114,7 +114,7 @@ public class TableProduct extends javax.swing.JPanel {
 //                    model.removeRow(row);
                     Object[] rowData = getRowAt(row, (DefaultTableModel) table.getModel());
                     MessageDialog dialog = new MessageDialog(frame);
-                    dialog.showMessage("Delete cost id: " + rowData[0].toString(), "Deleted data cannot be recovered");
+                    dialog.showMessage("Delete product id: " + rowData[0].toString(), "Deleted data cannot be recovered");
                     if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
                         //Delete row on SQL server
 

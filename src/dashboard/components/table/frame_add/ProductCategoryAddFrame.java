@@ -19,12 +19,12 @@ import query.tool.query.ProductCategoryQuery;
  * @author Admin
  */
 public class ProductCategoryAddFrame extends javax.swing.JFrame {
-    
+
     private JFrame frame;
     private Connection conn;
-    
-    private boolean isInvalid = false;
-    
+
+    private boolean isInvalid = true;
+
     public ProductCategoryAddFrame() {
         this.setUndecorated(true);
         this.getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
@@ -34,7 +34,7 @@ public class ProductCategoryAddFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         closeBtn.setEnabled(false);
         alertProCtg.setVisible(false);
-        
+
         try {
             this.conn = Settings.BuildConnect();
         } catch (SQLException ex) {
@@ -161,14 +161,19 @@ public class ProductCategoryAddFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-        try {
-            new ProductCategoryQuery(conn).insertProductCategory(categoryNameBox.getText());
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        frame.dispose();
+        if (!categoryNameBox.getText().isEmpty() && !isInvalid) {
+            try {
+                new ProductCategoryQuery(conn).insertProductCategory(categoryNameBox.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
+            frame.dispose();
+        } else if(categoryNameBox.getText().isEmpty()){
+            alertProCtg.setText("Do not empty field");
+            alertProCtg.setVisible(true);
+            isInvalid = true;
+        }
     }//GEN-LAST:event_okBtnMouseClicked
 
     private void categoryNameBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_categoryNameBoxKeyReleased

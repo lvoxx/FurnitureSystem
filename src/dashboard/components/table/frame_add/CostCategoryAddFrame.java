@@ -23,7 +23,7 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
     private JFrame frame;
     private Connection conn;
 
-    private boolean isInvalid = false;
+    private boolean isInvalid = true;
 
     public CostCategoryAddFrame() {
         this.setUndecorated(true);
@@ -161,12 +161,18 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void okBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_okBtnMouseClicked
-        try {
-            new CostCategoryQuery(conn).insertCostCategory(categoryNameBox.getText());
-        } catch (SQLException ex) {
-            Logger.getLogger(CostCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+        if (!categoryNameBox.getText().isEmpty() && !isInvalid) {
+            try {
+                new CostCategoryQuery(conn).insertCostCategory(categoryNameBox.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(CostCategoryAddFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            frame.dispose();
+        } else if(categoryNameBox.getText().isEmpty()) {
+            alertCtg.setText("Do not empty field");
+            alertCtg.setVisible(true);
+            isInvalid = true;
         }
-        frame.dispose();
 
     }//GEN-LAST:event_okBtnMouseClicked
 
@@ -180,9 +186,9 @@ public class CostCategoryAddFrame extends javax.swing.JFrame {
                 isInvalid = false;
                 alertCtg.setVisible(false);
             }
-            if(isInvalid){
+            if (isInvalid) {
                 closeBtn.setEnabled(false);
-            }else{
+            } else {
                 closeBtn.setEnabled(true);
             }
         } catch (SQLException ex) {
