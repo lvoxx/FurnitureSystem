@@ -30,6 +30,14 @@ public class Menu extends javax.swing.JPanel {
     }
 
     private void init() {
+        if (LoadUserUI.user.getRole().equalsIgnoreCase("Admin")) {
+            loadAdminUI();
+        } else {
+            loadStaffUI();
+        }
+    }
+
+    private void loadAdminUI() {
         //GENERAL
         listMenu1.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));          //Index 0   (Usability)
         listMenu1.addItem(new Model_Menu("2", "Order", Model_Menu.MenuType.MENU));              //Index 1   (Usability)
@@ -44,6 +52,30 @@ public class Menu extends javax.swing.JPanel {
         listMenu1.addItem(new Model_Menu("9", "Stock", Model_Menu.MenuType.MENU));              //Index 8   (Usability)
         listMenu1.addItem(new Model_Menu("10", "Shipping Provider", Model_Menu.MenuType.MENU)); //Index 9   (Usability)
         listMenu1.addItem(new Model_Menu("11", "Material Supplier", Model_Menu.MenuType.MENU)); //Index 10  (Usability)
+
+        //LOG OUT
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 11
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 12
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 13
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 14
+        listMenu1.addItem(new Model_Menu("12", "Logout", Model_Menu.MenuType.MENU));            //Index 15  (Usability)
+    }
+
+    private void loadStaffUI() {
+        //GENERAL
+        listMenu1.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));          //Index 0   (Usability)
+        listMenu1.addItem(new Model_Menu("2", "Order", Model_Menu.MenuType.MENU));              //Index 1   (Usability)
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));                  //Index 2
+
+        //MANAGE
+        listMenu1.addItem(new Model_Menu("", "Data Manage", Model_Menu.MenuType.TITLE));        //Index 3
+        listMenu1.addItem(new Model_Menu("4staff", "Add Item", Model_Menu.MenuType.MENU));      //Index 4   (Usability)
+        listMenu1.addItem(new Model_Menu("5staff", "View Item", Model_Menu.MenuType.MENU));     //Index 5   (Usability)
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 6   (Usability)
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 7   (Usability)
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 8   (Usability)
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 9   (Usability)
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 10  (Usability)
 
         //LOG OUT
         listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));                   //Index 11

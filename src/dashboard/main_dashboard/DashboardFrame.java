@@ -5,6 +5,7 @@
  */
 package dashboard.main_dashboard;
 
+import dashboard.component.LoadUserUI;
 import dashboard.components.table.controllers.ISettings;
 import dashboard.event.EventMenuSelected;
 import dashboard.form.*;
@@ -38,6 +39,9 @@ public class DashboardFrame extends javax.swing.JFrame {
     private ShippingProviderForm shippingProviderForm;
     private MaterialSupplierForm materialSupplierForm;
 
+    private AddItemForm addForm;
+    private ViewItemForm viewItemForm;
+
     private JFrame frame;
     private Connection conn;
 
@@ -45,9 +49,12 @@ public class DashboardFrame extends javax.swing.JFrame {
     private ISettings iSettings;
 
     public DashboardFrame(User user) {
-        initComponents();
+        LoadUserUI.user = user;
+
         this.frame = this;
         this.user = user;
+        initComponents();
+
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/dashboard/icon/FurnitureStoreVector.png")));
         try {
             this.conn = Settings.BuildConnect();
@@ -59,7 +66,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(DashboardFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         //For getter
         iSettings = new ISettings() {
             @Override
@@ -67,12 +74,13 @@ public class DashboardFrame extends javax.swing.JFrame {
                 return user;
             }
         };
-        
+
         setForm();
 
         //setBackground(new Color(0, 0, 0, 0));
         home = new DashboardHome();
         orderForm = new OrderForm(frame, iSettings);
+
         costForm = new CostForm(frame, iSettings);
         customerForm = new CustomerForm(frame);
         staffForm = new StaffForm();
@@ -80,6 +88,9 @@ public class DashboardFrame extends javax.swing.JFrame {
         stockForm = new StockForm();
         shippingProviderForm = new ShippingProviderForm();
         materialSupplierForm = new MaterialSupplierForm();
+
+        addForm = new AddItemForm();
+        viewItemForm = new ViewItemForm();
 
         menu.initMoving(DashboardFrame.this);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -106,11 +117,19 @@ public class DashboardFrame extends javax.swing.JFrame {
                         break;
                     }
                     case 4: {
-                        setForm(customerForm);                 //Customer
+                        if (user.getRole().equalsIgnoreCase("Admin")) {
+                            setForm(customerForm);                 //Customer
+                        } else {
+                            setForm(addForm);
+                        }
                         break;
                     }
                     case 5: {
-                        setForm(costForm);                 //Cost
+                        if (user.getRole().equalsIgnoreCase("Admin")) {
+                            setForm(costForm);                 //Cost
+                        } else {
+                            setForm(viewItemForm);
+                        }
                         break;
                     }
                     case 6: {
