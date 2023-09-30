@@ -101,11 +101,12 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
                 int row = tcl.getRow();
                 //[1-9]\\d*
                 String newValue = String.valueOf(tcl.getNewValue());
+                System.out.print(newValue);
                 //Quantity
                 if (collumn == 2) {
                     if (newValue.matches("[1-9]\\d*")) {
-                        int newQuantity = Integer.valueOf(newValue);
-                        int newSubtotal = newQuantity * (int) table.getModel().getValueAt(row, collumn + 1);
+                        int newQuantity = Integer.parseInt(newValue);
+                        int newSubtotal = newQuantity * Integer.parseInt(table.getModel().getValueAt(row, collumn + 1).toString());
                         table.getModel().setValueAt(newSubtotal, row, 4);
                         alert.alertQuantityOn(false);
                         alert.setNewTotal(String.valueOf(getNewPrice(row, newSubtotal)) + " $");
@@ -115,8 +116,8 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
                 } else {
                     //FixedPrice
                     if (newValue.matches("0|[1-9]\\d*")) {
-                        int newQuantity = Integer.valueOf(newValue);
-                        int newSubtotal = newQuantity * (int) table.getModel().getValueAt(row, collumn - 1);
+                        int newQuantity = Integer.parseInt(newValue);
+                        int newSubtotal = newQuantity * Integer.parseInt(table.getModel().getValueAt(row, collumn - 1).toString());
                         table.getModel().setValueAt(newSubtotal, row, 4);
                         alert.alertFixedPriceOn(false);
                         alert.setNewTotal(String.valueOf(getNewPrice(row, newSubtotal)) + " $");
@@ -163,6 +164,8 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
 
+        setPreferredSize(new java.awt.Dimension(500, 350));
+
         table.setForeground(new java.awt.Color(51, 51, 51));
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -196,11 +199,13 @@ public class TableUnpaidOrderDetails extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

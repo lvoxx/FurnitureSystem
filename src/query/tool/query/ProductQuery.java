@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import query.connect.Settings;
 import query.tool.model.ProductCategory;
 
 public class ProductQuery {
@@ -48,18 +49,19 @@ public class ProductQuery {
     public List<String> selectAllProductName() throws SQLException {
         List<String> res = new ArrayList<>();
         try {
-            PreparedStatement preSt = this.conn
-                    .prepareStatement("SELECT * FROM tblProduct");
-            ResultSet rs = preSt.executeQuery();
-            rs = preSt.executeQuery();
-            while (rs.next()) {
-                res.add(rs.getString("ProductName"));
+            if (this.conn != null) {
+                PreparedStatement preSt = this.conn
+                        .prepareStatement("SELECT * FROM tblProduct");
+                ResultSet rs = preSt.executeQuery();
+                rs = preSt.executeQuery();
+                while (rs.next()) {
+                    res.add(rs.getString("ProductName"));
+                }
             }
-
         } catch (SQLException ex) {
             throw new SQLException("Failed to get product name list");
         }
-        
+
         return res;
     }
 
@@ -94,6 +96,24 @@ public class ProductQuery {
                 Product product = new Product(rs.getInt("ProductID"), rs.getString("ProductName"), rs.getInt("InStockQuantity"), rs.getInt("Price"), rs.getInt("ProductCtgID"), rs.getDate("DateAdded"));
                 ProductCategory productCategory = new ProductCategory(rs.getInt("ProductCtgID"), rs.getString("CategoryName"));
                 res.add(new MProduct(product, productCategory));
+            }
+
+        } catch (SQLException ex) {
+            throw new SQLException("Failed to get Product list");
+        }
+        return res;
+    }
+
+    public Product selectProductByName(String name) throws SQLException {
+        Product res = null;
+        try {
+            PreparedStatement preSt = this.conn
+                    .prepareStatement("SELECT * FROM tblProduct WHERE [ProductName] LIKE ?");
+            preSt.setString(1, "%" + name + "%");
+            ResultSet rs = preSt.executeQuery();
+
+            if (rs.next()) {
+                res = new Product(rs.getInt("ProductID"), rs.getString("ProductName"), rs.getInt("InStockQuantity"), rs.getInt("Price"), rs.getInt("ProductCtgID"), rs.getDate("DateAdded"));
             }
 
         } catch (SQLException ex) {

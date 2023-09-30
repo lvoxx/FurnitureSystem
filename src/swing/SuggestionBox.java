@@ -5,6 +5,7 @@
 package swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
@@ -103,13 +104,18 @@ public class SuggestionBox extends JPanel {
         }
         setModel(new DefaultComboBoxModel(v), "");
         JPanel p = new JPanel(new BorderLayout());
-        p.setBorder(BorderFactory.createTitledBorder("AutoSuggestion Box"));
+        p.setBorder(BorderFactory.createTitledBorder("Search Product"));
         p.add(combo, BorderLayout.NORTH);
         add(p);
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        setPreferredSize(new Dimension(300, 150));
+        setPreferredSize(new Dimension(300, 70));
+        setBackground(Color.WHITE);
     }
     private boolean hide_flag = false;
+    
+    public String getText(){
+        return this.tf.getText();
+    }
 
     private void setModel(DefaultComboBoxModel mdl, String str) {
         combo.setModel(mdl);
