@@ -5,7 +5,7 @@
  */
 package main;
 
-import dashboard.main.DashboardFrame;
+import dashboard.main_dashboard.DashboardFrame;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
