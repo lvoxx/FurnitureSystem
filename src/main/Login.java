@@ -42,6 +42,7 @@ public class Login extends javax.swing.JPanel {
                 connectAlertLabel.setVisible(true);
                 Notification notif = new Notification(frame, Notification.Type.WARNING, Notification.Location.TOP_CENTER, "Lost connection to server");
                 notif.showNotification();
+                Settings.TryGetConnection(frame, conn);
             }else{
                 Notification notif = new Notification(frame, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, "Connect to server success");
                 notif.showNotification();
@@ -187,12 +188,18 @@ public class Login extends javax.swing.JPanel {
     private void myButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_myButton1ActionPerformed
         GeneralQuery query = new GeneralQuery(conn);
         UserQuery uQuery = new UserQuery(conn);
+        if(txtUser.getText().isEmpty() || txtPass.getText().isEmpty()){
+            alert.setText("Do not empty field");
+            alert.setVisible(true);
+            return;
+        }
         try {
+            this.conn = Settings.BuildConnect();
             if (this.conn == null) {
-                this.conn = Settings.BuildConnect();
                 Settings.TryGetConnection(frame, conn);
             }
             if (!query.isUserAuth(txtUser.getText(), txtPass.getText())) {
+                alert.setText("Invalid username or password");
                 alert.setVisible(true);
             } else {
                 System.out.print(txtUser.getText() + ", " + txtPass.getText());

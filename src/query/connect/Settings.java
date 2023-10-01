@@ -39,7 +39,7 @@ public class Settings {
     }
 
     public static Database ReadDatabase() {
-        Database db = new Database("null", "null", "null", "null");
+        Database db = new Database("null", "null", "null");
         try {
             Gson gson = new Gson();
             FileReader reader = new FileReader(SOURCE);
@@ -52,14 +52,14 @@ public class Settings {
 
     public static Connection BuildConnect() throws SQLException {
         Database db = Settings.ReadDatabase();
-        String urlString = "jdbc:sqlserver://$ipAddress:$port;databaseName=FurnitureSystem;encrypt=true;trustServerCertificate=true";
+        String urlString = "jdbc:sqlserver://$serverName;databaseName=FurnitureSystem;encrypt=true;trustServerCertificate=true;queryTimeout=5";
         Connection conn = null;
         //System.out.println(urlString);
         try {
             String username = null, password = null;
             if (db != null) {
-                urlString = urlString.replace("$ipAddress", db.getIpAddress());
-                urlString = urlString.replace("$port", db.getPort());
+                urlString = urlString.replace("$serverName", db.getServerName());
+
                 username = db.getUsername();
                 password = db.getPassword();
             }

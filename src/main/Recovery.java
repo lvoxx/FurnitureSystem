@@ -79,7 +79,7 @@ public class Recovery extends javax.swing.JPanel {
 
         findAccountBtn.setBackground(new java.awt.Color(125, 229, 251));
         findAccountBtn.setForeground(new java.awt.Color(40, 40, 40));
-        findAccountBtn.setText("Find account");
+        findAccountBtn.setText("Find Account");
         findAccountBtn.setFont(new java.awt.Font("sansserif", 0, 13)); // NOI18N
         findAccountBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -148,7 +148,13 @@ public class Recovery extends javax.swing.JPanel {
     }//GEN-LAST:event_findAccountBtnActionPerformed
 
     private void findAccountBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_findAccountBtnMouseClicked
+        if(recoveryKeyTxt.getText().isEmpty()){
+            alert.setText("Do not empty field");
+            alert.setVisible(true);
+            return;
+        }
         try {
+            conn = Settings.BuildConnect();
             if (conn == null) {
                 Settings.TryGetConnection(frame, conn);
             }
@@ -163,6 +169,7 @@ public class Recovery extends javax.swing.JPanel {
                 if (dialog.getMessageType().equals(MessageDialog.MessageType.OK)) {
                 }
             } else {
+                alert.setText("No recovery key found");
                 alert.setVisible(true);
             }
         } catch (Exception ex) {

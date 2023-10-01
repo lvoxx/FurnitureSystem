@@ -25,7 +25,7 @@ public class ConnectDialog extends javax.swing.JFrame {
     private ConnectDialog main;
     protected Connection conn;
     protected Database dbConn;
-    
+
     private String ipAddressStr;
     private String portStr;
     private String usernameStr;
@@ -55,13 +55,14 @@ public class ConnectDialog extends javax.swing.JFrame {
     }
 
     public void tryGetConnection() {
-        Database db = new Database("null", "null", "null", "null");
+        Database db = new Database("null", "null", "null");
         try {
-            db = new Database(ipAddress.getText(), username.getText(), String.copyValueOf(password.getPassword()), port.getText());
+            db = new Database(serverName.getText(), username.getText(), String.copyValueOf(password.getPassword()));
 
             Settings.WriteDatabase(db);
             this.conn = Settings.BuildConnect();
             if (conn == null) {
+                alert.setText("Failed to connecto to server");
                 alert.setVisible(true);
             } else {
                 Notification notif = new Notification(frame, Notification.Type.SUCCESS, Notification.Location.TOP_CENTER, "Connect to server success");
@@ -84,10 +85,8 @@ public class ConnectDialog extends javax.swing.JFrame {
 
         slide = new swing.PanelSlide();
         jLabel2 = new javax.swing.JLabel();
-        ipAddress = new swing.MyTextField();
+        serverName = new swing.MyTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        port = new swing.MyTextField();
         username = new swing.MyTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -104,47 +103,26 @@ public class ConnectDialog extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("CONNECT");
 
-        ipAddress.setForeground(new java.awt.Color(102, 102, 102));
-        ipAddress.setText("Server IP");
-        ipAddress.addFocusListener(new java.awt.event.FocusAdapter() {
+        serverName.setForeground(new java.awt.Color(102, 102, 102));
+        serverName.setText("Server Name");
+        serverName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                ipAddressFocusGained(evt);
+                serverNameFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                ipAddressFocusLost(evt);
+                serverNameFocusLost(evt);
             }
         });
-        ipAddress.addActionListener(new java.awt.event.ActionListener() {
+        serverName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ipAddressActionPerformed(evt);
+                serverNameActionPerformed(evt);
             }
         });
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("IP Address");
-
-        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel3.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Port");
-
-        port.setForeground(new java.awt.Color(102, 102, 102));
-        port.setText("Server Port");
-        port.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                portFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                portFocusLost(evt);
-            }
-        });
-        port.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                portActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("Server Name");
 
         username.setForeground(new java.awt.Color(102, 102, 102));
         username.setText("Server Username");
@@ -221,16 +199,14 @@ public class ConnectDialog extends javax.swing.JFrame {
                 .addGroup(slideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(slideLayout.createSequentialGroup()
                         .addGap(45, 45, 45)
-                        .addGroup(slideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(slideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ipAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(slideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(serverName, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(slideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(slideLayout.createSequentialGroup()
                         .addGap(94, 94, 94)
                         .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -248,11 +224,7 @@ public class ConnectDialog extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ipAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(serverName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -261,7 +233,7 @@ public class ConnectDialog extends javax.swing.JFrame {
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(88, 88, 88)
                 .addComponent(alert)
                 .addGap(32, 32, 32)
                 .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,13 +254,9 @@ public class ConnectDialog extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ipAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ipAddressActionPerformed
+    private void serverNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverNameActionPerformed
 
-    }//GEN-LAST:event_ipAddressActionPerformed
-
-    private void portActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_portActionPerformed
+    }//GEN-LAST:event_serverNameActionPerformed
 
     private void usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameActionPerformed
         // TODO add your handling code here:
@@ -299,32 +267,20 @@ public class ConnectDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        tryGetConnection();
+        //tryGetConnection();
     }//GEN-LAST:event_connectButtonActionPerformed
 
-    private void ipAddressFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ipAddressFocusGained
+    private void serverNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_serverNameFocusGained
         // TODO add your handling code here:
-        ipAddress.setText("");
-        ipAddress.setForeground(new Color(0, 0, 0));
-    }//GEN-LAST:event_ipAddressFocusGained
+        serverName.setText("");
+        serverName.setForeground(new Color(0, 0, 0));
+    }//GEN-LAST:event_serverNameFocusGained
 
-    private void ipAddressFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ipAddressFocusLost
+    private void serverNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_serverNameFocusLost
         // TODO add your handling code here:
-        ipAddress.setForeground(new Color(102, 102, 102));
-        ipAddressStr = ipAddress.getText();
-    }//GEN-LAST:event_ipAddressFocusLost
-
-    private void portFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_portFocusGained
-        // TODO add your handling code here:
-        port.setText("");
-        port.setForeground(new Color(0, 0, 0));
-    }//GEN-LAST:event_portFocusGained
-
-    private void portFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_portFocusLost
-        // TODO add your handling code here:
-        port.setForeground(new Color(102, 102, 102));
-        portStr = port.getText();
-    }//GEN-LAST:event_portFocusLost
+        serverName.setForeground(new Color(102, 102, 102));
+        ipAddressStr = serverName.getText();
+    }//GEN-LAST:event_serverNameFocusLost
 
     private void usernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usernameFocusGained
         // TODO add your handling code here:
@@ -347,25 +303,34 @@ public class ConnectDialog extends javax.swing.JFrame {
     private void passwordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusLost
         // TODO add your handling code here:
         password.setForeground(new Color(102, 102, 102));
-        passwordStr= password.getText();
+        passwordStr = password.getText();
     }//GEN-LAST:event_passwordFocusLost
 
     private void connectButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_connectButtonMousePressed
-        tryGetConnection();
+        if(serverName.getText().isEmpty() || username.getText().isEmpty() || password.getText().isEmpty()){
+            alert.setText("Do not empty field");
+            alert.setVisible(true);
+            return;
+        }
+            
+        try {
+            tryGetConnection();
+        } catch (Exception e) {
+            alert.setText("Failed to connect to server");
+            alert.setVisible(true);
+        }
     }//GEN-LAST:event_connectButtonMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel alert;
     private swing.MyButton connectButton;
-    private swing.MyTextField ipAddress;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private swing.MyPassword password;
-    private swing.MyTextField port;
+    private swing.MyTextField serverName;
     private swing.PanelSlide slide;
     private swing.MyTextField username;
     // End of variables declaration//GEN-END:variables

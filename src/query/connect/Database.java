@@ -11,28 +11,26 @@ package query.connect;
  */
 public class Database {
 
-    private String ipAddress;
+    private String serverName;
     private String username;
     private String password;
-    private String port;
 
-    public Database(String ipAddress, String username, String password, String port) {
-        this.ipAddress = ipAddress;
+    public Database(String serverName, String username, String password) {
+        this.serverName = serverName;
         this.username = username;
         this.password = password;
-        this.port = port;
     }
 
-    public String getIpAddress() {
-        return this.ipAddress;
+    public String getServerName() {
+        return serverName;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
     }
 
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
@@ -40,29 +38,12 @@ public class Database {
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getPort() {
-        return this.port;
-    }
-
-    public void setPort(String port) {
-        this.port = port;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                " ipAddress='" + getIpAddress() + "'" +
-                ", username='" + getUsername() + "'" +
-                ", password='" + getPassword() + "'" +
-                ", port='" + getPort() + "'" +
-                "}";
-    }
-
+   
 }

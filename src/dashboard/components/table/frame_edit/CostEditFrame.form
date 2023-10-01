@@ -96,6 +96,9 @@
     <Component class="textfield.swing.TextField" name="costIDBox">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="66" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="CostID"/>
         <Property name="labelText" type="java.lang.String" value="Cost ID"/>
       </Properties>
@@ -106,6 +109,9 @@
     <Component class="textfield.swing.TextField" name="creatorNameBox">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="66" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Contact"/>
         <Property name="labelText" type="java.lang.String" value="Creator Name"/>
       </Properties>
@@ -126,6 +132,9 @@
     <Component class="textfield.swing.TextField" name="dateAddedBox">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="66" red="66" type="rgb"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Discount"/>
         <Property name="labelText" type="java.lang.String" value="Date Added"/>
       </Properties>

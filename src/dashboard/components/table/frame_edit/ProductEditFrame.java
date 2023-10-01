@@ -111,6 +111,7 @@ public class ProductEditFrame extends javax.swing.JFrame {
         jLabel1.setText("Edit Product Info");
 
         productIDBox.setEditable(false);
+        productIDBox.setForeground(new java.awt.Color(102, 102, 102));
         productIDBox.setText("CostID");
         productIDBox.setLabelText("Product ID");
         productIDBox.addActionListener(new java.awt.event.ActionListener() {
@@ -128,6 +129,7 @@ public class ProductEditFrame extends javax.swing.JFrame {
         });
 
         dateAddedBox.setEditable(false);
+        dateAddedBox.setForeground(new java.awt.Color(102, 102, 102));
         dateAddedBox.setText("Discount");
         dateAddedBox.setLabelText("Date Added");
         dateAddedBox.addActionListener(new java.awt.event.ActionListener() {

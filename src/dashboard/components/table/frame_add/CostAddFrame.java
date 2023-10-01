@@ -95,6 +95,7 @@ public class CostAddFrame extends javax.swing.JFrame {
         jLabel1.setText("New Cost Info");
 
         creatorNameBox.setEditable(false);
+        creatorNameBox.setForeground(new java.awt.Color(102, 102, 102));
         creatorNameBox.setLabelText("Creator Name");
         creatorNameBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

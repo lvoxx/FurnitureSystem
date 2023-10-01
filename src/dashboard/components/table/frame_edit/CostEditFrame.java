@@ -107,6 +107,7 @@ public class CostEditFrame extends javax.swing.JFrame {
         jLabel1.setText("Edit Cost Info");
 
         costIDBox.setEditable(false);
+        costIDBox.setForeground(new java.awt.Color(102, 102, 102));
         costIDBox.setText("CostID");
         costIDBox.setLabelText("Cost ID");
         costIDBox.addActionListener(new java.awt.event.ActionListener() {
@@ -116,6 +117,7 @@ public class CostEditFrame extends javax.swing.JFrame {
         });
 
         creatorNameBox.setEditable(false);
+        creatorNameBox.setForeground(new java.awt.Color(102, 102, 102));
         creatorNameBox.setText("Contact");
         creatorNameBox.setLabelText("Creator Name");
         creatorNameBox.addActionListener(new java.awt.event.ActionListener() {
@@ -138,6 +140,7 @@ public class CostEditFrame extends javax.swing.JFrame {
         });
 
         dateAddedBox.setEditable(false);
+        dateAddedBox.setForeground(new java.awt.Color(102, 102, 102));
         dateAddedBox.setText("Discount");
         dateAddedBox.setLabelText("Date Added");
         dateAddedBox.addActionListener(new java.awt.event.ActionListener() {
